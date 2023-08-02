@@ -71,7 +71,7 @@ function Register() {
         setUsernameError(false);
         setErrors({});
     };
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setErrors(validation(values));
         const newUser = {
@@ -94,7 +94,7 @@ function Register() {
             !errors.password &&
             !errors.confirmPassword
         ) {
-            registerUser(newUser, dispatch);
+            await registerUser(newUser, dispatch);
         }
     };
     return (

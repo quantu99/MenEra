@@ -39,7 +39,7 @@ function Login() {
             [e.target.name]: e.target.value,
         });
     };
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setErrors(validation(values));
         const user = {
@@ -47,7 +47,7 @@ function Login() {
             password: values.password,
         };
         if (!errors.username && !errors.password) {
-            loginUser(user, dispatch, navigate);
+            await loginUser(user, dispatch, navigate);
         }
     };
     return (
