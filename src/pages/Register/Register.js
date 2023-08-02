@@ -99,7 +99,7 @@ function Register() {
         };
         setErrors(validation(values));
         checkUsername(newUser.username);
-        if (allErrors) {
+        if (allErrors === true) {
             await registerUser(newUser, dispatch);
         }
     };
