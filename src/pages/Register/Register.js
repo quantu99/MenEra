@@ -85,8 +85,17 @@ function Register() {
         // Call back for before function
 
         checkUsername(newUser.username);
-        console.log(usernameError);
-        registerUser(newUser, dispatch);
+        if (
+            !errors.firstname &&
+            !errors.lastname &&
+            !errors.address &&
+            !errors.username &&
+            !errors.email &&
+            !errors.password &&
+            !errors.confirmPassword
+        ) {
+            registerUser(newUser, dispatch);
+        }
     };
     return (
         <>
