@@ -41,9 +41,14 @@ function Login() {
         });
     };
     useEffect(() => {
-        if ((values.username !== '') & (values.password !== '')) {
-            setAllErrors(true);
-        }
+        const isValid =
+            values.username !== '' &&
+            !values.username.trim() &&
+            !values.username.indexOf(' ') !== -1 &&
+            values.password !== '' &&
+            !values.password.trim() &&
+            !values.password.indexOf(' ') !== -1;
+        setAllErrors(isValid);
     }, [values]);
     const handleSubmit = async (e) => {
         e.preventDefault();

@@ -63,14 +63,14 @@ function Account() {
         });
     };
     useEffect(() => {
-        if (
+        const isValid =
             values.password !== '' &&
+            !values.password.trim() &&
+            !values.password.indexOf(' ') !== -1 &&
             values.confirmPassword !== '' &&
             values.password.length >= 6 &&
-            values.confirmPassword === values.password
-        ) {
-            setAllErrors(true);
-        }
+            values.confirmPassword === values.password;
+        setAllErrors(isValid);
     }, [values]);
     const handleKeyDown = async function (e) {
         try {

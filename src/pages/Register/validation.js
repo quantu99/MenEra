@@ -1,5 +1,6 @@
 const validation = (values) => {
     let errors = {};
+
     if (!values.firstname) {
         errors.firstname = 'This field is required';
     }
@@ -11,6 +12,8 @@ const validation = (values) => {
     }
     if (!values.username) {
         errors.username = 'This field is required';
+    } else if (values.username.indexOf(' ') !== -1) {
+        errors.username = 'Username must not have the empty space ';
     }
     if (!values.email) {
         errors.email = 'This field is required';
@@ -18,9 +21,11 @@ const validation = (values) => {
         errors.email = 'Email is invalid, please check again( ex: mrAbc@gmail.com,...)';
     }
     if (!values.password) {
-        errors.password = 'This field is required';
+        errors.password = 'This field is required( ';
     } else if (values.password.length < 6) {
         errors.password = 'Password must be more than 6 characters';
+    } else if (values.password.indexOf(' ') !== -1) {
+        errors.password = 'Password must not have the empty space';
     }
     if (!values.confirmPassword) {
         errors.confirmPassword = 'Confirm password is required';

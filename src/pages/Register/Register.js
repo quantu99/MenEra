@@ -48,19 +48,24 @@ function Register() {
         confirmPassword: '',
     });
     useEffect(() => {
-        if (
+        // Kiểm tra tính hợp lệ của các giá trị input
+        const isValid =
             values.firstname !== '' &&
             values.lastname !== '' &&
             values.address !== '' &&
+            !values.username.trim() &&
+            !values.username.indexOf(' ') !== -1 &&
             values.username !== '' &&
             values.email !== '' &&
+            /\S+@\S+\.\S+/.test(values.email) &&
             values.password !== '' &&
+            !values.password.trim() &&
+            !values.password.indexOf(' ') !== -1 &&
             values.confirmPassword !== '' &&
             values.password.length >= 6 &&
-            values.confirmPassword === values.password
-        ) {
-            setAllErrors(true);
-        }
+            values.confirmPassword === values.password;
+
+        setAllErrors(isValid); // Cập nhật giá trị của allErrors
     }, [values]);
     // get all users
     useEffect(() => {
