@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './Account.module.scss';
 import classNames from 'classnames/bind';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createAxios } from '../../createInstance';
 import {
     faSuitcase,
@@ -22,6 +22,7 @@ import validation from './validations';
 import { editSuccess, logoutSuccess } from '../../redux/authSlice';
 import { editUsers, logoutUsers } from '../../redux/apiRequest';
 import { Link, useNavigate } from 'react-router-dom';
+import { useRef } from 'react';
 const cx = classNames.bind(styles);
 function Account() {
     const [view, setView] = useState('password');
@@ -34,6 +35,7 @@ function Account() {
         setView('password');
         setEye(true);
     };
+    const btnRef = useRef(null);
     const user = useSelector((state) => state.auth.login?.currentUser);
     const userId = user?._id;
     const userFisrtname = user?.firstname;
@@ -41,6 +43,7 @@ function Account() {
     const firstLetterFirstname = userFisrtname?.substring(0, 1);
     const firstLetterLastname = userLastname?.substring(0, 1);
     const stateSuccess = useSelector((state) => state.auth.edit?.success);
+    const stateFetching = useSelector((state) => state.auth.edit?.isFetching);
     console.log(stateSuccess);
     // set validation
     const dispatch = useDispatch();
@@ -48,6 +51,7 @@ function Account() {
     let axiosJWT = createAxios(user, dispatch, editSuccess);
     let axiosJWT2 = createAxios(user, dispatch, logoutSuccess);
     const [errors, setErrors] = useState({});
+    const [allErrors, setAllErrors] = useState(false);
     const [values, setValues] = useState({
         password: '',
         confirmPassword: '',
@@ -58,15 +62,47 @@ function Account() {
             [e.target.name]: e.target.value,
         });
     };
+    useEffect(() => {
+        if (
+            values.password !== '' &&
+            values.confirmPassword !== '' &&
+            values.password.length >= 6 &&
+            values.confirmPassword === values.password
+        ) {
+            setAllErrors(true);
+        }
+    }, [values]);
+    const handleKeyDown = async function (e) {
+        try {
+            switch (e.which) {
+                case 13:
+                    setErrors(validation(values));
+                    const newPassword = values.password;
+                    if (allErrors) {
+                        await editUsers(user?.accessToken, userId, newPassword, dispatch, axiosJWT);
+                    }
+                    if (stateSuccess && allErrors) {
+                        await logoutUsers(user?.accessToken, userId, dispatch, navigate, axiosJWT2);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+    btnRef.current?.addEventListener('keydown', handleKeyDown);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErrors(validation(values));
         const newPassword = values.password;
-        if (!errors.password && !errors.confirmPassword) {
+        if (allErrors) {
             await editUsers(user?.accessToken, userId, newPassword, dispatch, axiosJWT);
         }
-        if (stateSuccess) {
-            await logoutUsers(user?.accessToken, userId, dispatch, navigate, axiosJWT);
+        if (stateSuccess && allErrors) {
+            await logoutUsers(user?.accessToken, userId, dispatch, navigate, axiosJWT2);
         }
     };
 
@@ -193,7 +229,9 @@ function Account() {
                                         {errors.password && <p className={cx('error-msg')}>{errors.password}</p>}
                                     </div>
                                     <div className={cx('edit-input-div')}>
-                                        <label className={cx('edit-input-label')}>Confirm new password</label>
+                                        <label style={{ marginTop: '20px' }} className={cx('edit-input-label')}>
+                                            Confirm new password
+                                        </label>
                                         <div className={cx('input-and-icon')}>
                                             <input
                                                 onChange={handleChange}
@@ -216,13 +254,29 @@ function Account() {
                                                 />
                                             )}
                                         </div>
+                                        {stateSuccess && (
+                                            <p
+                                                style={{ color: 'var(--tan-color)', marginTop: '10px' }}
+                                                className={cx('error-msg')}
+                                            >
+                                                Change password successful!
+                                            </p>
+                                        )}
                                         {errors.confirmPassword && (
                                             <p className={cx('error-msg')}>{errors.confirmPassword}</p>
                                         )}
                                     </div>
-                                    <button onClick={handleSubmit} className={cx('btn')}>
-                                        Save
-                                    </button>
+                                    {!stateFetching && (
+                                        <button ref={btnRef} onClick={handleSubmit} className={cx('btn')}>
+                                            Save
+                                        </button>
+                                    )}
+                                    {stateFetching && (
+                                        <button disabled={true} className={cx('btn', 'loading-btn')}>
+                                            <span className={cx('loading-btn-content')}>Please wait...</span>
+                                        </button>
+                                    )}
+
                                     <label htmlFor="checkbox">
                                         <FontAwesomeIcon className={cx('x')} icon={faXmark} />
                                     </label>

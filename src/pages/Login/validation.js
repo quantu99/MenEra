@@ -1,10 +1,10 @@
 const validation = (values) => {
     let errors = {};
     if (!values.username) {
-        errors.username = 'Username is required';
+        errors.username = 'This field is required';
     }
     if (!values.password) {
-        errors.password = 'Password is required';
+        errors.password = 'This field is required';
     } else if (values.password.length < 6) {
         errors.password = 'Password must be more than 6 characters';
     }

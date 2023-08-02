@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Footer from '../../components/Layouts/Footer/Footer';
 import Header from '../../components/Layouts/Header/Header';
 import styles from './Login.module.scss';
@@ -29,6 +29,7 @@ function Login() {
     const loginError = useSelector((state) => state.auth.login?.error);
 
     const [errors, setErrors] = useState({});
+    const [allErrors, setAllErrors] = useState(false);
     const [values, setValues] = useState({
         username: '',
         password: '',
@@ -39,14 +40,19 @@ function Login() {
             [e.target.name]: e.target.value,
         });
     };
+    useEffect(() => {
+        if ((values.username !== '') & (values.password !== '')) {
+            setAllErrors(true);
+        }
+    }, [values]);
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setErrors(validation(values));
         const user = {
             username: values.username,
             password: values.password,
         };
-        if (!errors.username && !errors.password) {
+        setErrors(validation(values));
+        if (allErrors) {
             await loginUser(user, dispatch, navigate);
         }
     };

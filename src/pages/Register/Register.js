@@ -36,8 +36,8 @@ function Register() {
     const fetching = useSelector((state) => state.auth.register?.isFetching);
     const success = useSelector((state) => state.auth.register?.success);
     // State error username : checked if the new username is same to the username already have in DB
-
     const [errors, setErrors] = useState({});
+    const [allErrors, setAllErrors] = useState(false);
     const [values, setValues] = useState({
         firstname: '',
         lastname: '',
@@ -47,6 +47,21 @@ function Register() {
         password: '',
         confirmPassword: '',
     });
+    useEffect(() => {
+        if (
+            values.firstname !== '' &&
+            values.lastname !== '' &&
+            values.address !== '' &&
+            values.username !== '' &&
+            values.email !== '' &&
+            values.password !== '' &&
+            values.confirmPassword !== '' &&
+            values.password.length >= 6 &&
+            values.confirmPassword === values.password
+        ) {
+            setAllErrors(true);
+        }
+    }, [values]);
     // get all users
     useEffect(() => {
         getAllUsers(dispatch);
@@ -56,6 +71,7 @@ function Register() {
     // get the username object in allUsers array
     // The function that used to check the new username was signed up to be same the username already have in DB ?
     const [usernameError, setUsernameError] = useState(false);
+
     const allUsers = useSelector((state) => state.user.getAllUsers?.allUsers);
     const allUsersUsername = allUsers?.map((user) => user.username);
     const checkUsername = (username) => {
@@ -73,7 +89,6 @@ function Register() {
     };
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setErrors(validation(values));
         const newUser = {
             firstname: values.firstname,
             lastname: values.lastname,
@@ -82,18 +97,9 @@ function Register() {
             email: values.email,
             password: values.password,
         };
-        // Call back for before function
-
+        setErrors(validation(values));
         checkUsername(newUser.username);
-        if (
-            !errors.firstname &&
-            !errors.lastname &&
-            !errors.address &&
-            !errors.username &&
-            !errors.email &&
-            !errors.password &&
-            !errors.confirmPassword
-        ) {
+        if (allErrors) {
             await registerUser(newUser, dispatch);
         }
     };
