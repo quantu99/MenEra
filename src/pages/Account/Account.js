@@ -65,8 +65,8 @@ function Account() {
     useEffect(() => {
         const isValid =
             values.password !== '' &&
-            !values.password.trim() &&
             !values.password.indexOf(' ') !== -1 &&
+            !values.password.includes("'") &&
             values.confirmPassword !== '' &&
             values.password.length >= 6 &&
             values.confirmPassword === values.password;

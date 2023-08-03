@@ -43,10 +43,10 @@ function Login() {
     useEffect(() => {
         const isValid =
             values.username !== '' &&
-            !values.username.trim() &&
             !values.username.indexOf(' ') !== -1 &&
+            /^[a-zA-Z0-9]+$/.test(values.username) &&
             values.password !== '' &&
-            !values.password.trim() &&
+            !values.password.includes("'") &&
             !values.password.indexOf(' ') !== -1;
         setAllErrors(isValid);
     }, [values]);

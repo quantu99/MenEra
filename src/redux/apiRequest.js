@@ -24,11 +24,12 @@ export const loginUser = async (user, dispatch, navigate) => {
         dispatch(loginFailed());
     }
 };
-export const registerUser = async (user, dispatch) => {
+export const registerUser = async (user, dispatch, navigate) => {
     dispatch(registerStart());
     try {
         const res = await axios.post('https://emc-api.onrender.com/v1/auth/register', user);
         dispatch(registerSuccess(res.data));
+        navigate('/register-success');
     } catch (err) {
         dispatch(registerFailed());
     }

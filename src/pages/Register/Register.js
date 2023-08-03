@@ -15,7 +15,7 @@ import Footer from '../../components/Layouts/Footer/Footer';
 import Header from '../../components/Layouts/Header/Header';
 import styles from './Register.module.scss';
 import classNames from 'classnames/bind';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import validation from './validation';
 import { getAllUsers, registerUser } from '../../redux/apiRequest';
 import { useDispatch, useSelector } from 'react-redux';
@@ -33,8 +33,8 @@ function Register() {
     };
     // Set validate
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const fetching = useSelector((state) => state.auth.register?.isFetching);
-    const success = useSelector((state) => state.auth.register?.success);
     // State error username : checked if the new username is same to the username already have in DB
     const [errors, setErrors] = useState({});
     const [allErrors, setAllErrors] = useState(false);
@@ -47,26 +47,31 @@ function Register() {
         password: '',
         confirmPassword: '',
     });
+    console.log(values.username);
     useEffect(() => {
         // Kiểm tra tính hợp lệ của các giá trị input
         const isValid =
             values.firstname !== '' &&
             values.lastname !== '' &&
             values.address !== '' &&
-            !values.username.trim() &&
             !values.username.indexOf(' ') !== -1 &&
             values.username !== '' &&
+            !values.username.includes("'") &&
+            /^[a-zA-Z0-9]+$/.test(values.username) &&
             values.email !== '' &&
+            !values.email.indexOf(' ') !== -1 &&
             /\S+@\S+\.\S+/.test(values.email) &&
+            !values.email.includes("'") &&
             values.password !== '' &&
-            !values.password.trim() &&
             !values.password.indexOf(' ') !== -1 &&
+            !values.password.includes("'") &&
             values.confirmPassword !== '' &&
             values.password.length >= 6 &&
             values.confirmPassword === values.password;
 
         setAllErrors(isValid); // Cập nhật giá trị của allErrors
     }, [values]);
+    console.log(allErrors);
     // get all users
     useEffect(() => {
         getAllUsers(dispatch);
@@ -76,12 +81,18 @@ function Register() {
     // get the username object in allUsers array
     // The function that used to check the new username was signed up to be same the username already have in DB ?
     const [usernameError, setUsernameError] = useState(false);
-
+    const [emailError, setEmailError] = useState(false);
     const allUsers = useSelector((state) => state.user.getAllUsers?.allUsers);
     const allUsersUsername = allUsers?.map((user) => user.username);
+    const allUserEmail = allUsers?.map((user) => user.email);
     const checkUsername = (username) => {
         if (allUsersUsername.includes(username)) {
             return setUsernameError(true);
+        }
+    };
+    const checkEmail = (email) => {
+        if (allUserEmail.includes(email)) {
+            return setEmailError(true);
         }
     };
     const handleChange = (e) => {
@@ -104,183 +115,161 @@ function Register() {
         };
         setErrors(validation(values));
         checkUsername(newUser.username);
-        if (allErrors === true) {
-            await registerUser(newUser, dispatch);
+        checkEmail(newUser.email);
+        if (allErrors) {
+            await registerUser(newUser, dispatch, navigate);
         }
     };
     return (
         <>
-            {!success && (
-                <div className={cx('wrapper', 'grid')}>
-                    <Header />
-                    <div className={cx('container', 'row', 'no-gutters')}>
-                        <div className={cx('login-div', 'col', 'l-6', 'l-o-3')}>
-                            <h1 className={cx('title')}>Register</h1>
-                            <p className={cx('caption')}>You can create an account when you checkout and pay.</p>
-                            {/* FORM OPEN */}
-                            <form onSubmit={handleSubmit} className={cx('input-form')}>
-                                <div className={cx('input-div')}>
-                                    <label htmlFor="firstname" className={cx('input-label')}>
-                                        <FontAwesomeIcon className={cx('icon')} icon={faA} />
-                                    </label>
-                                    <input
-                                        onChange={handleChange}
-                                        name="firstname"
-                                        id="firstname"
-                                        className={cx('input')}
-                                        placeholder="First name"
-                                    />
-                                </div>
-                                {errors.firstname && <p className={cx('error-msg')}>{errors.firstname}</p>}
-                                <div className={cx('input-div')}>
-                                    <label htmlFor="lastname" className={cx('input-label')}>
-                                        <FontAwesomeIcon className={cx('icon')} icon={faZ} />
-                                    </label>
-                                    <input
-                                        onChange={handleChange}
-                                        name="lastname"
-                                        id="lastname"
-                                        className={cx('input')}
-                                        placeholder="Last name"
-                                    />
-                                </div>
-                                {errors.lastname && <p className={cx('error-msg')}>{errors.lastname}</p>}
-                                <div className={cx('input-div')}>
-                                    <label htmlFor="address" className={cx('input-label')}>
-                                        <FontAwesomeIcon className={cx('icon')} icon={faLocationDot} />
-                                    </label>
-                                    <input
-                                        onChange={handleChange}
-                                        name="address"
-                                        id="address"
-                                        className={cx('input')}
-                                        placeholder="Address"
-                                    />
-                                </div>
-                                {errors.address && <p className={cx('error-msg')}>{errors.address}</p>}
-                                <div className={cx('input-div')}>
-                                    <label htmlFor="username" className={cx('input-label')}>
-                                        <FontAwesomeIcon className={cx('icon')} icon={faUserTie} />
-                                    </label>
-                                    <input
-                                        onChange={handleChange}
-                                        name="username"
-                                        id="username"
-                                        className={cx('input')}
-                                        placeholder="Username"
-                                    />
-                                </div>
-                                {usernameError && (
-                                    <p className={cx('error-msg')}>This username is already use, please try again.</p>
+            <div className={cx('wrapper', 'grid')}>
+                <Header />
+                <div className={cx('container', 'row', 'no-gutters')}>
+                    <div className={cx('login-div', 'col', 'l-6', 'l-o-3')}>
+                        <h1 className={cx('title')}>Register</h1>
+                        <p className={cx('caption')}>You can create an account when you checkout and pay.</p>
+                        {/* FORM OPEN */}
+                        <form onSubmit={handleSubmit} className={cx('input-form')}>
+                            <div className={cx('input-div')}>
+                                <label htmlFor="firstname" className={cx('input-label')}>
+                                    <FontAwesomeIcon className={cx('icon')} icon={faA} />
+                                </label>
+                                <input
+                                    onChange={handleChange}
+                                    name="firstname"
+                                    id="firstname"
+                                    className={cx('input')}
+                                    placeholder="First name"
+                                />
+                            </div>
+                            {errors.firstname && <p className={cx('error-msg')}>{errors.firstname}</p>}
+                            <div className={cx('input-div')}>
+                                <label htmlFor="lastname" className={cx('input-label')}>
+                                    <FontAwesomeIcon className={cx('icon')} icon={faZ} />
+                                </label>
+                                <input
+                                    onChange={handleChange}
+                                    name="lastname"
+                                    id="lastname"
+                                    className={cx('input')}
+                                    placeholder="Last name"
+                                />
+                            </div>
+                            {errors.lastname && <p className={cx('error-msg')}>{errors.lastname}</p>}
+                            <div className={cx('input-div')}>
+                                <label htmlFor="address" className={cx('input-label')}>
+                                    <FontAwesomeIcon className={cx('icon')} icon={faLocationDot} />
+                                </label>
+                                <input
+                                    onChange={handleChange}
+                                    name="address"
+                                    id="address"
+                                    className={cx('input')}
+                                    placeholder="Address"
+                                />
+                            </div>
+                            {errors.address && <p className={cx('error-msg')}>{errors.address}</p>}
+                            <div className={cx('input-div')}>
+                                <label htmlFor="username" className={cx('input-label')}>
+                                    <FontAwesomeIcon className={cx('icon')} icon={faUserTie} />
+                                </label>
+                                <input
+                                    onChange={handleChange}
+                                    name="username"
+                                    id="username"
+                                    className={cx('input')}
+                                    placeholder="Username"
+                                />
+                            </div>
+                            {usernameError && (
+                                <p className={cx('error-msg')}>This username is already use, please try again.</p>
+                            )}
+                            {errors.username && <p className={cx('error-msg')}>{errors.username}</p>}
+                            <div className={cx('input-div')}>
+                                <label htmlFor="email" className={cx('input-label')}>
+                                    <FontAwesomeIcon className={cx('icon')} icon={faPaperPlane} />
+                                </label>
+                                <input
+                                    onChange={handleChange}
+                                    name="email"
+                                    id="email"
+                                    className={cx('input')}
+                                    placeholder="Email address"
+                                />
+                            </div>
+                            {errors.email && <p className={cx('error-msg')}>{errors.email}</p>}
+                            {emailError && (
+                                <p className={cx('error-msg')}>This email is already use, please try again</p>
+                            )}
+                            <div className={cx('input-div')}>
+                                <label htmlFor="password" className={cx('input-label')}>
+                                    <FontAwesomeIcon className={cx('icon')} icon={faLock} />
+                                </label>
+                                <input
+                                    onChange={handleChange}
+                                    name="password"
+                                    id="password"
+                                    type={`${view}`}
+                                    className={cx('input')}
+                                    placeholder="Password"
+                                />
+                                {eye && (
+                                    <FontAwesomeIcon className={cx('icon-view')} onClick={handleView} icon={faEye} />
                                 )}
-                                {errors.username && <p className={cx('error-msg')}>{errors.username}</p>}
-                                <div className={cx('input-div')}>
-                                    <label htmlFor="email" className={cx('input-label')}>
-                                        <FontAwesomeIcon className={cx('icon')} icon={faPaperPlane} />
-                                    </label>
-                                    <input
-                                        onChange={handleChange}
-                                        name="email"
-                                        id="email"
-                                        className={cx('input')}
-                                        placeholder="Email address"
+                                {!eye && (
+                                    <FontAwesomeIcon
+                                        className={cx('icon-view')}
+                                        onClick={handleUnview}
+                                        icon={faEyeSlash}
                                     />
-                                </div>
-                                {errors.email && <p className={cx('error-msg')}>{errors.email}</p>}
-                                <div className={cx('input-div')}>
-                                    <label htmlFor="password" className={cx('input-label')}>
-                                        <FontAwesomeIcon className={cx('icon')} icon={faLock} />
-                                    </label>
-                                    <input
-                                        onChange={handleChange}
-                                        name="password"
-                                        id="password"
-                                        type={`${view}`}
-                                        className={cx('input')}
-                                        placeholder="Password"
-                                    />
-                                    {eye && (
-                                        <FontAwesomeIcon
-                                            className={cx('icon-view')}
-                                            onClick={handleView}
-                                            icon={faEye}
-                                        />
-                                    )}
-                                    {!eye && (
-                                        <FontAwesomeIcon
-                                            className={cx('icon-view')}
-                                            onClick={handleUnview}
-                                            icon={faEyeSlash}
-                                        />
-                                    )}
-                                </div>
-                                {errors.password && <p className={cx('error-msg')}>{errors.password}</p>}
-                                <div className={cx('input-div')}>
-                                    <label htmlFor="confirmPassword" className={cx('input-label')}>
-                                        <FontAwesomeIcon className={cx('icon')} icon={faCheck} />
-                                    </label>
-                                    <input
-                                        onChange={handleChange}
-                                        name="confirmPassword"
-                                        id="confirmPassword"
-                                        type={`${view}`}
-                                        className={cx('input')}
-                                        placeholder="Confirm password"
-                                    />
-                                    {eye && (
-                                        <FontAwesomeIcon
-                                            className={cx('icon-view')}
-                                            onClick={handleView}
-                                            icon={faEye}
-                                        />
-                                    )}
-                                    {!eye && (
-                                        <FontAwesomeIcon
-                                            className={cx('icon-view')}
-                                            onClick={handleUnview}
-                                            icon={faEyeSlash}
-                                        />
-                                    )}
-                                </div>
-                                {errors.confirmPassword && <p className={cx('error-msg')}>{errors.confirmPassword}</p>}
-                                {!fetching && <button className={cx('btn')}>Sign up</button>}
-                                {fetching && (
-                                    <button disabled={true} className={cx('btn', 'loading-btn')}>
-                                        <span className={cx('loading-btn-content')}>Please wait...</span>
-                                    </button>
                                 )}
-                            </form>
-                            {/* FORM CLOSE */}
-                            <p className={cx('or')}>or</p>
-                            <p className={cx('navigate')}>
-                                If this isn’t your first time on our site, you may already have an account with us.
-                                Login{' '}
-                                <span className={cx('navigate-span')}>
-                                    <Link style={{ color: 'inherit' }} to={'/login'}>
-                                        here
-                                    </Link>
-                                </span>
-                            </p>
-                        </div>
+                            </div>
+                            {errors.password && <p className={cx('error-msg')}>{errors.password}</p>}
+                            <div className={cx('input-div')}>
+                                <label htmlFor="confirmPassword" className={cx('input-label')}>
+                                    <FontAwesomeIcon className={cx('icon')} icon={faCheck} />
+                                </label>
+                                <input
+                                    onChange={handleChange}
+                                    name="confirmPassword"
+                                    id="confirmPassword"
+                                    type={`${view}`}
+                                    className={cx('input')}
+                                    placeholder="Confirm password"
+                                />
+                                {eye && (
+                                    <FontAwesomeIcon className={cx('icon-view')} onClick={handleView} icon={faEye} />
+                                )}
+                                {!eye && (
+                                    <FontAwesomeIcon
+                                        className={cx('icon-view')}
+                                        onClick={handleUnview}
+                                        icon={faEyeSlash}
+                                    />
+                                )}
+                            </div>
+                            {errors.confirmPassword && <p className={cx('error-msg')}>{errors.confirmPassword}</p>}
+                            {!fetching && <button className={cx('btn')}>Sign up</button>}
+                            {fetching && (
+                                <button disabled={true} className={cx('btn', 'loading-btn')}>
+                                    <span className={cx('loading-btn-content')}>Please wait...</span>
+                                </button>
+                            )}
+                        </form>
+                        {/* FORM CLOSE */}
+                        <p className={cx('or')}>or</p>
+                        <p className={cx('navigate')}>
+                            If this isn’t your first time on our site, you may already have an account with us. Login{' '}
+                            <span className={cx('navigate-span')}>
+                                <Link style={{ color: 'inherit' }} to={'/login'}>
+                                    here
+                                </Link>
+                            </span>
+                        </p>
                     </div>
-                    <Footer />
                 </div>
-            )}
-            {success && (
-                <div className={cx('wrapper', 'grid')}>
-                    <Header />
-                    <div className={cx('container', 'row', 'no-gutters')}>
-                        <div className={cx('login-div', 'col', 'l-6', 'l-o-3')}>
-                            <h1 className={cx('title', 'title-success')}>Welcome</h1>
-                            <p className={cx('caption')}>Your account is created successful. Welcome to us, sir</p>
-                            <Link className={cx('link')} to={'/login'}>
-                                <button className={cx('btn', 'btn-success')}>Sign in</button>
-                            </Link>
-                        </div>
-                    </div>
-                    <Footer />
-                </div>
-            )}
+                <Footer />
+            </div>
         </>
     );
 }
