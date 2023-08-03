@@ -105,7 +105,11 @@ function Account() {
             await logoutUsers(user?.accessToken, userId, dispatch, navigate, axiosJWT2);
         }
     };
-
+    useEffect(() => {
+        if (!user) {
+            navigate('/login');
+        }
+    }, [user]);
     return (
         <div className={cx('wrapper', 'grid')}>
             <div className={cx('container', 'row', 'no-gutters')}>
