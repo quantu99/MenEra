@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './Header.module.scss';
 import classNames from 'classnames/bind';
-import { faMagnifyingGlassDollar, faSuitcase, faUserTie } from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlassDollar, faSuitcase, faUserTie, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { faGratipay } from '@fortawesome/free-brands-svg-icons';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logoutUsers } from '../../../redux/apiRequest';
 import { createAxios } from '../../../createInstance';
 import { logoutSuccess } from '../../../redux/authSlice';
+import Cart from '../../../pages/Cart/Cart';
 const cx = classNames.bind(styles);
 function Header() {
     const [position, setPosition] = useState('-200%');
@@ -37,6 +38,7 @@ function Header() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const user = useSelector((state) => state.auth.login?.currentUser);
+    const userCart = user?.cart;
     const userId = user?._id;
     const userAccessToken = user?.accessToken;
     let axiosJWT = createAxios(user, dispatch, logoutSuccess);
@@ -50,16 +52,19 @@ function Header() {
             setUserExist(false);
         }
     }, [userExist]);
+    const [openCart, setOpenCart] = useState(false);
+    const handleOpenCart = () => {
+        setOpenCart(!openCart);
+    };
+
     return (
         <div>
             <div className={cx('wrapper', 'grid')}>
                 <div className={cx('row', 'no-gutters', 'container')}>
                     <div className={cx('logo', 'col', 'l-3')}>
-                        <h1>
-                            <Link style={{ textDecoration: 'none', color: 'inherit' }} to={'/'}>
-                                Men's Era
-                            </Link>
-                        </h1>
+                        <Link style={{ textDecoration: 'none', color: 'inherit' }} to={'/'}>
+                            Men's Era
+                        </Link>
                     </div>
                     <div className={cx('navigation', 'col', 'l-5')}>
                         <ul className={cx('nav-list')}>
@@ -89,7 +94,16 @@ function Header() {
                             <FontAwesomeIcon className={cx('icon')} icon={faUserTie} />
                         </label>
                         <FontAwesomeIcon className={cx('icon')} icon={faGratipay} />
-                        <FontAwesomeIcon className={cx('icon')} icon={faSuitcase} />
+
+                        <FontAwesomeIcon onClick={handleOpenCart} className={cx('icon')} icon={faSuitcase} />
+
+                        {openCart && (
+                            <>
+                                <Cart />
+                                <FontAwesomeIcon onClick={handleOpenCart} className={cx('cart-icon')} icon={faXmark} />
+                                <div onClick={handleOpenCart} className={cx('cart-overlay')}></div>
+                            </>
+                        )}
                         <input type="checkbox" id="checkbox" className={cx('checkbox')} />
                         <div className={cx('question')}>
                             {!userExist && (
@@ -138,18 +152,43 @@ function Header() {
                 <div className={cx('row', 'menu-container', 'no-gutters')}>
                     <div className={cx('menu-left-item', 'col', 'l-2', 'l-o-1')}>
                         <ul className={cx('menu-list')}>
-                            <li className={cx('menu-list-item')}>All Shoes </li>
-                            <li className={cx('menu-list-item')}>Brogues</li>
-                            <li className={cx('menu-list-item')}>Casual Shoes</li>
-                            <li className={cx('menu-list-item')}>Sandals</li>
+                            <Link style={{ textDecoration: 'none' }} to={'/all-shoes'} className={cx('menu-list-item')}>
+                                All Shoes{' '}
+                            </Link>
+                            <Link style={{ textDecoration: 'none' }} to={'/brogues'} className={cx('menu-list-item')}>
+                                Brogues
+                            </Link>
+                            <Link
+                                style={{ textDecoration: 'none' }}
+                                to={'/casual-shoes'}
+                                className={cx('menu-list-item')}
+                            >
+                                Casual Shoes
+                            </Link>
+                            <Link style={{ textDecoration: 'none' }} to={'/sandals'} className={cx('menu-list-item')}>
+                                Sandals
+                            </Link>
                         </ul>
                     </div>
                     <div className={cx('menu-center-item', 'col', 'l-2')}>
                         <ul className={cx('menu-list')}>
-                            <li className={cx('menu-list-item')}>Formal Shoes</li>
-                            <li className={cx('menu-list-item')}>Work Shoes</li>
-                            <li className={cx('menu-list-item')}>Trainers</li>
-                            <li className={cx('menu-list-item')}>Sandals</li>
+                            <Link
+                                style={{ textDecoration: 'none' }}
+                                to={'/formal-shoes'}
+                                className={cx('menu-list-item')}
+                            >
+                                Formal Shoes
+                            </Link>
+                            <Link
+                                style={{ textDecoration: 'none' }}
+                                to={'/work-shoes'}
+                                className={cx('menu-list-item')}
+                            >
+                                Work Shoes
+                            </Link>
+                            <Link style={{ textDecoration: 'none' }} to={'/loafers'} className={cx('menu-list-item')}>
+                                Loafers
+                            </Link>
                         </ul>
                     </div>
                     <div className={cx('menu-right-item', 'col', 'l-6', 'l-o-1')}>

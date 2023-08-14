@@ -5,91 +5,25 @@ import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { getAllProducts, getProductDetail } from '../../redux/apiRequest';
+import { useDispatch, useSelector } from 'react-redux';
 const cx = classNames.bind(styles);
 function AllShoes() {
-    const products = [
-        {
-            name: 'Gibbs Washed Brogue Shoes',
-            price: '2.493.000',
-            color: 'Tan',
-            type: ['Brogue'],
-            imgUrl: 'https://baselondon.com/cdn/shop/products/GIBBS_20WASHED_20TAN_20XD02248_201_quzfa3_320x.jpg?v=1690553455',
-            imgUrl2:
-                'https://baselondon.com/cdn/shop/products/GIBBS_20WASHED_20TAN_20XD02248_206_rqqctx_320x.jpg?v=1690553455',
-        },
-        {
-            name: 'Gibbs Washed Brogue Shoes',
-            price: '2.493.000',
-            color: 'Tan',
-            type: ['Brogue'],
-            imgUrl: 'https://baselondon.com/cdn/shop/products/GIBBS_20WASHED_20TAN_20XD02248_201_quzfa3_320x.jpg?v=1690553455',
-            imgUrl2:
-                'https://baselondon.com/cdn/shop/products/GIBBS_20WASHED_20TAN_20XD02248_206_rqqctx_320x.jpg?v=1690553455',
-        },
-        {
-            name: 'Gibbs Washed Brogue Shoes',
-            price: '2.493.000',
-            color: 'Tan',
-            type: ['Brogue'],
-            imgUrl: 'https://baselondon.com/cdn/shop/products/GIBBS_20WASHED_20TAN_20XD02248_201_quzfa3_320x.jpg?v=1690553455',
-            imgUrl2:
-                'https://baselondon.com/cdn/shop/products/GIBBS_20WASHED_20TAN_20XD02248_206_rqqctx_320x.jpg?v=1690553455',
-        },
-        {
-            name: 'Gibbs Washed Brogue Shoes',
-            price: '2.493.000',
-            color: 'Tan',
-            type: ['Brogue'],
-            imgUrl: 'https://baselondon.com/cdn/shop/products/GIBBS_20WASHED_20TAN_20XD02248_201_quzfa3_320x.jpg?v=1690553455',
-            imgUrl2:
-                'https://baselondon.com/cdn/shop/products/GIBBS_20WASHED_20TAN_20XD02248_206_rqqctx_320x.jpg?v=1690553455',
-        },
-        {
-            name: 'Gibbs Washed Brogue Shoes',
-            price: '2.493.000',
-            color: 'Tan',
-            type: ['Brogue'],
-            imgUrl: 'https://baselondon.com/cdn/shop/products/GIBBS_20WASHED_20TAN_20XD02248_201_quzfa3_320x.jpg?v=1690553455',
-            imgUrl2:
-                'https://baselondon.com/cdn/shop/products/GIBBS_20WASHED_20TAN_20XD02248_206_rqqctx_320x.jpg?v=1690553455',
-        },
-        {
-            name: 'Gibbs Washed Brogue Shoes',
-            price: '2.493.000',
-            color: 'Tan',
-            type: ['Brogue'],
-            imgUrl: 'https://baselondon.com/cdn/shop/products/GIBBS_20WASHED_20TAN_20XD02248_201_quzfa3_320x.jpg?v=1690553455',
-            imgUrl2:
-                'https://baselondon.com/cdn/shop/products/GIBBS_20WASHED_20TAN_20XD02248_206_rqqctx_320x.jpg?v=1690553455',
-        },
-        {
-            name: 'Gibbs Washed Brogue Shoes',
-            price: '2.493.000',
-            color: 'Tan',
-            type: ['Brogue'],
-            imgUrl: 'https://baselondon.com/cdn/shop/products/GIBBS_20WASHED_20TAN_20XD02248_201_quzfa3_320x.jpg?v=1690553455',
-            imgUrl2:
-                'https://baselondon.com/cdn/shop/products/GIBBS_20WASHED_20TAN_20XD02248_206_rqqctx_320x.jpg?v=1690553455',
-        },
-        {
-            name: 'Gibbs Washed Brogue Shoes',
-            price: '2.493.000',
-            color: 'Tan',
-            type: ['Brogue'],
-            imgUrl: 'https://baselondon.com/cdn/shop/products/GIBBS_20WASHED_20TAN_20XD02248_201_quzfa3_320x.jpg?v=1690553455',
-            imgUrl2:
-                'https://baselondon.com/cdn/shop/products/GIBBS_20WASHED_20TAN_20XD02248_206_rqqctx_320x.jpg?v=1690553455',
-        },
-        {
-            name: 'Gibbs Washed Brogue Shoes',
-            price: '2.493.000',
-            color: 'Tan',
-            type: ['Brogue'],
-            imgUrl: 'https://baselondon.com/cdn/shop/products/GIBBS_20WASHED_20TAN_20XD02248_201_quzfa3_320x.jpg?v=1690553455',
-            imgUrl2:
-                'https://baselondon.com/cdn/shop/products/GIBBS_20WASHED_20TAN_20XD02248_206_rqqctx_320x.jpg?v=1690553455',
-        },
-    ];
+    const dispatch = useDispatch();
+    const allProducts = useSelector((state) => state.products.getAllProducts?.allProducts);
+    useEffect(() => {
+        getAllProducts(dispatch);
+    }, []);
+    // Uppercase first letter of word
+    function capitalizeString(str) {
+        return str.replace(/\b\w/g, function (l) {
+            return l.toUpperCase();
+        });
+    }
+    const handleClick = (id) => {
+        getProductDetail(dispatch, id);
+    };
     return (
         <div className={cx('wrapper')}>
             <Header />
@@ -119,19 +53,31 @@ function AllShoes() {
                         />
                     </div>
                 </div>
-                <div className={cx('body', 'row', 'no-gutters')}>
-                    {products.map((product) => (
-                        <div className={cx('product-div', 'col', 'l-3')}>
-                            <img className={cx('feature-image')} src={product.imgUrl} />
-                            <img className={cx('second-image')} src={product.imgUrl2} />
-                            <div className={cx('top-detail')}>
-                                <p className={cx('product-name')}>{product.name}</p>
-                                <p className={cx('product-price')}>{product.price}đ</p>
-                            </div>
-                            <p className={cx('product-color')}>{product.color}</p>
-                        </div>
-                    ))}
-                </div>
+                {allProducts && (
+                    <div className={cx('body', 'row', 'no-gutters')}>
+                        {allProducts?.map((product) => (
+                            <Link
+                                onClick={() => handleClick(product._id)}
+                                style={{ textDecoration: 'none' }}
+                                to={`/${product._id}`}
+                                className={cx('product-div', 'col', 'l-3')}
+                            >
+                                <img className={cx('feature-image')} src={product.imageUrl} />
+                                <img className={cx('second-image')} src={product.imageUrl2} />
+                                <div className={cx('top-detail')}>
+                                    <p className={cx('product-name')}>{capitalizeString(product.name)}</p>
+                                    <p className={cx('product-price')}>{product.price.toLocaleString()}đ</p>
+                                </div>
+                                <p className={cx('product-color')}>{capitalizeString(product.color)}</p>
+                            </Link>
+                        ))}
+                    </div>
+                )}
+                {!allProducts && (
+                    <div>
+                        <p>Please wait...</p>
+                    </div>
+                )}
             </div>
             <Footer />
         </div>

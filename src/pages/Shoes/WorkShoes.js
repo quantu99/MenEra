@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 import { getAllProducts } from '../../redux/apiRequest';
 import { useDispatch, useSelector } from 'react-redux';
 const cx = classNames.bind(styles);
-function Brogues() {
+function WorkShoes() {
     const products = [
         {
             name: 'Gibbs Washed Brogue Shoes',
@@ -98,7 +98,7 @@ function Brogues() {
     useEffect(() => {
         getAllProducts(dispatch);
     }, []);
-    const brogues = allProducts?.filter((product) => product.type.includes('brogues'));
+    const work = allProducts?.filter((product) => product.type.includes('work'));
     // Uppercase first letter of word
     function capitalizeString(str) {
         return str.replace(/\b\w/g, function (l) {
@@ -116,27 +116,26 @@ function Brogues() {
                                 <span className={cx('home')}>Home</span>
                             </Link>{' '}
                             <FontAwesomeIcon className={cx('intro-para-navigate-icon')} icon={faChevronRight} />{' '}
-                            <span className={cx('shoes')}>Brogues</span>
+                            <span className={cx('shoes')}>Work Shoes</span>
                         </p>
-                        <h1 className={cx('intro-para-title')}>Brogues</h1>
+                        <h1 className={cx('intro-para-title')}>Work Shoes</h1>
                         <p className={cx('intro-para-content')}>
-                            Men’s brogues are a staple for any man's shoe collection, from the classic patent leather we
-                            all love to the more quirky and unique styles. They are perfect for all formal occasions and
-                            are completely timeless, meaning they will never go out of fashion! Make a long-lasting
-                            first impression with our designs, whether it is with the timeless wingtip Oxfords or the
-                            contemporary derbies with mixed upper treatments and cleated sole units. Shop our larger
-                            collection of formal footwear to discover more.
+                            Ensure that you’re stylish and comfortable in the office with our collection of men’s work
+                            shoes. Crafted from the finest leather, our collection of work shoes are long-lasting and
+                            include intricate details such as stitching around the sole. Keep your feet feeling snug
+                            from 9 until 5 in these great office shoes for men. When you're done, check out our larger
+                            range of men's shoes.
                         </p>
                     </div>
                     <div className={cx('intro-image-div', 'l-7', 'l-o-1')}>
                         <img
                             className={cx('intro-image')}
-                            src="https://baselondon.com/cdn/shop/collections/Brogues-Banner_1024x1024.jpg?v=1673340875"
+                            src="https://baselondon.com/cdn/shop/collections/Screenshot_from_2023-01-09_15-15-53_1024x1024.png?v=1673342863"
                         />
                     </div>
                 </div>
                 <div className={cx('body', 'row', 'no-gutters')}>
-                    {brogues?.map((product) => (
+                    {work?.map((product) => (
                         <Link
                             style={{ textDecoration: 'none' }}
                             to={`/${product._id}`}
@@ -158,4 +157,4 @@ function Brogues() {
     );
 }
 
-export default Brogues;
+export default WorkShoes;

@@ -3,6 +3,9 @@ import {
     editFailed,
     editStart,
     editSuccess,
+    getCartFailed,
+    getCartStart,
+    getCartSuccess,
     loginFailed,
     loginStart,
     loginSuccess,
@@ -14,6 +17,20 @@ import {
     registerSuccess,
 } from './authSlice';
 import { getAllUsersFailed, getAllUsersStart, getAllUsersSuccess } from './userSlice';
+import {
+    cartFailed,
+    cartStart,
+    cartSuccess,
+    deleteCartFailed,
+    deleteCartStart,
+    deleteCartSuccess,
+    getAllProductsFailed,
+    getAllProductsStart,
+    getAllProductsSuccess,
+    getDetailFailed,
+    getDetailStart,
+    getDetailSuccess,
+} from './productsSlice';
 export const loginUser = async (user, dispatch, navigate) => {
     dispatch(loginStart());
     try {
@@ -74,5 +91,55 @@ export const editUsers = async (accessToken, id, newPassword, dispatch, axiosJWT
         dispatch(editSuccess(res.data));
     } catch (err) {
         dispatch(editFailed());
+    }
+};
+export const getAllProducts = async (dispatch) => {
+    dispatch(getAllProductsStart());
+    try {
+        const res = await axios.get('https://emc-api.onrender.com/v1/products');
+        dispatch(getAllProductsSuccess(res.data));
+    } catch (err) {
+        dispatch(getAllProductsFailed());
+    }
+};
+export const getProductDetail = async (dispatch, id, navigate) => {
+    dispatch(getDetailStart());
+    try {
+        const res = await axios.get('https://emc-api.onrender.com/v1/products/' + id);
+        dispatch(getDetailSuccess(res.data));
+        navigate(`/${id}`);
+    } catch (err) {
+        dispatch(getDetailFailed());
+    }
+};
+export const addToCart = async (id, userId, dispatch) => {
+    dispatch(cartStart());
+    try {
+        const res = await axios.put('https://emc-api.onrender.com/v1/products/add/' + id, {
+            user: userId,
+        });
+        dispatch(cartSuccess(res.data));
+    } catch (err) {
+        dispatch(cartFailed());
+    }
+};
+export const deleteFromCart = async (id, userId, dispatch) => {
+    dispatch(deleteCartStart());
+    try {
+        const res = await axios.put('https://emc-api.onrender.com/v1/products/delete/' + id, {
+            user: userId,
+        });
+        dispatch(deleteCartSuccess(res.data));
+    } catch (err) {
+        dispatch(deleteCartFailed());
+    }
+};
+export const getCart = async (id, dispatch) => {
+    dispatch(getCartStart());
+    try {
+        const res = await axios.get('https://emc-api.onrender.com/v1/auth/cart/' + id);
+        dispatch(getCartSuccess(res.data));
+    } catch (err) {
+        dispatch(getCartFailed());
     }
 };

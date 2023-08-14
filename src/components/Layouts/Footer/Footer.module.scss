@@ -20,13 +20,14 @@
         width: 50%;
         height: 250px;
     }
-    h1 {
+    p {
         font-family: 'Italiana', sans-serif;
         color: var(--tan-color);
         position: absolute;
         top: 68%;
         left: 50%;
         transform: translateX(-50%);
+        font-size: 40px;
     }
 }
 .about-paragraph {

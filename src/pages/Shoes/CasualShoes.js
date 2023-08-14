@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 import { getAllProducts } from '../../redux/apiRequest';
 import { useDispatch, useSelector } from 'react-redux';
 const cx = classNames.bind(styles);
-function Brogues() {
+function CasualShoes() {
     const products = [
         {
             name: 'Gibbs Washed Brogue Shoes',
@@ -98,7 +98,7 @@ function Brogues() {
     useEffect(() => {
         getAllProducts(dispatch);
     }, []);
-    const brogues = allProducts?.filter((product) => product.type.includes('brogues'));
+    const casual = allProducts?.filter((product) => product.type.includes('casual'));
     // Uppercase first letter of word
     function capitalizeString(str) {
         return str.replace(/\b\w/g, function (l) {
@@ -116,27 +116,27 @@ function Brogues() {
                                 <span className={cx('home')}>Home</span>
                             </Link>{' '}
                             <FontAwesomeIcon className={cx('intro-para-navigate-icon')} icon={faChevronRight} />{' '}
-                            <span className={cx('shoes')}>Brogues</span>
+                            <span className={cx('shoes')}>Casual Shoes</span>
                         </p>
-                        <h1 className={cx('intro-para-title')}>Brogues</h1>
+                        <h1 className={cx('intro-para-title')}>Casual Shoes</h1>
                         <p className={cx('intro-para-content')}>
-                            Men’s brogues are a staple for any man's shoe collection, from the classic patent leather we
-                            all love to the more quirky and unique styles. They are perfect for all formal occasions and
-                            are completely timeless, meaning they will never go out of fashion! Make a long-lasting
-                            first impression with our designs, whether it is with the timeless wingtip Oxfords or the
-                            contemporary derbies with mixed upper treatments and cleated sole units. Shop our larger
-                            collection of formal footwear to discover more.
+                            Looking for hip casual men's shoes? Men's Era has a huge selection of men's casual shoes
+                            that are stylish yet trendy, structured yet tailored and will be your wing-man wherever you
+                            go. Simply look below to explore our casual collection that features bold, bright designs as
+                            well as subtle, hipster styles. There really is something for everyone in this variety of
+                            men's shoes. If you love these, check out the rest of Men's Era's men's shoes, for more
+                            super cool styles.
                         </p>
                     </div>
                     <div className={cx('intro-image-div', 'l-7', 'l-o-1')}>
                         <img
                             className={cx('intro-image')}
-                            src="https://baselondon.com/cdn/shop/collections/Brogues-Banner_1024x1024.jpg?v=1673340875"
+                            src="https://baselondon.com/cdn/shop/collections/casual-Banner_1024x1024.jpg?v=1673342187"
                         />
                     </div>
                 </div>
                 <div className={cx('body', 'row', 'no-gutters')}>
-                    {brogues?.map((product) => (
+                    {casual?.map((product) => (
                         <Link
                             style={{ textDecoration: 'none' }}
                             to={`/${product._id}`}
@@ -158,4 +158,4 @@ function Brogues() {
     );
 }
 
-export default Brogues;
+export default CasualShoes;

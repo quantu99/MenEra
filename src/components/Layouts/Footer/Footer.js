@@ -9,7 +9,7 @@ function Footer() {
                 <div className={cx('about', 'col', 'l-5')}>
                     <div className={cx('image-div')}>
                         <img src={logo} alt="logo" />
-                        <h1>Men's Era</h1>
+                        <p>Men's Era</p>
                     </div>
                     <div className={cx('about-paragraph')}>
                         <h1>About Us</h1>
