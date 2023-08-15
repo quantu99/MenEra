@@ -93,7 +93,9 @@ function Header() {
                         <label htmlFor="checkbox">
                             <FontAwesomeIcon className={cx('icon')} icon={faUserTie} />
                         </label>
-                        <FontAwesomeIcon className={cx('icon')} icon={faGratipay} />
+                        <Link to={'/my-wishlist'}>
+                            <FontAwesomeIcon className={cx('icon')} icon={faGratipay} />
+                        </Link>
 
                         <FontAwesomeIcon onClick={handleOpenCart} className={cx('icon')} icon={faSuitcase} />
 

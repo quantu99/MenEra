@@ -2,7 +2,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import styles from './ProductDetail.module.scss';
 import classNames from 'classnames/bind';
 import { useEffect, useState, useRef } from 'react';
-import { addToCart, getAllProducts, getProductDetail } from '../../redux/apiRequest';
+import { addToCart, addToWish, deleteFromWish, getAllProducts, getProductDetail } from '../../redux/apiRequest';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircle, faHeart as farHeart } from '@fortawesome/free-regular-svg-icons';
@@ -21,8 +21,6 @@ function ProductDetail() {
     const productSuggest = allProduct?.filter((product) => product.type.every((type) => productType?.includes(type)));
     const user = useSelector((state) => state.auth.login?.currentUser);
     const userId = user?._id;
-    const userCart = user?.cart;
-    const isFetching = useSelector((state) => state.products.addToCart?.isFetching);
     useEffect(() => {
         getProductDetail(dispatch, id);
     }, []);
@@ -72,9 +70,13 @@ function ProductDetail() {
     const handleAddToCart = (id) => {
         addToCart(id, userId, dispatch);
     };
-    useEffect(() => {
-        console.log(userCart);
-    }, [isFetching]);
+
+    const handleAddToWish = (id) => {
+        addToWish(id, userId, dispatch);
+    };
+    const handleRemoveFromWish = (id) => {
+        deleteFromWish(id, userId, dispatch);
+    };
     return (
         <div className={cx('wrapper', 'grid')}>
             <Header />
@@ -100,26 +102,39 @@ function ProductDetail() {
                             <button onClick={() => handleAddToCart(productDetail?._id)} className={cx('btn')}>
                                 Add to cart
                             </button>
-                            <div className={cx('icon-div', 'fa-stack')}>
-                                <FontAwesomeIcon className={cx('fa-stack-2x', 'icon-circle')} icon={faCircle} />
-                                {!heart && (
+                            {!heart && (
+                                <div
+                                    onClick={() => handleAddToWish(productDetail?._id)}
+                                    className={cx('icon-div', 'fa-stack')}
+                                >
+                                    <FontAwesomeIcon className={cx('fa-stack-2x', 'icon-circle')} icon={faCircle} />
+
                                     <FontAwesomeIcon
                                         style={{ color: ' #ad2126' }}
                                         onClick={handleHeart}
                                         className={cx('fa-stack-1x', 'icon-heart')}
                                         icon={farHeart}
                                     />
-                                )}
-                                {heart && (
+                                    <div className={cx('bubbles')}>Add to WishList</div>
+                                </div>
+                            )}
+                            {heart && (
+                                <div
+                                    onClick={() => handleRemoveFromWish(productDetail?._id)}
+                                    className={cx('icon-div', 'fa-stack')}
+                                >
+                                    <FontAwesomeIcon className={cx('fa-stack-2x', 'icon-circle')} icon={faCircle} />
+
                                     <FontAwesomeIcon
                                         style={{ color: ' #ad2126' }}
                                         onClick={handleHeart}
                                         className={cx('fa-stack-1x', 'icon-heart')}
                                         icon={fasHeart}
                                     />
-                                )}
-                                <div className={cx('bubbles')}>Add to WishList</div>
-                            </div>
+
+                                    <div className={cx('bubbles')}>Add to WishList</div>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>

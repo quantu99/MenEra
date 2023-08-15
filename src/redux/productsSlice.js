@@ -22,6 +22,16 @@ const productsSlice = createSlice({
             success: false,
             error: false,
         },
+        addtoWish: {
+            isFetching: false,
+            success: false,
+            error: false,
+        },
+        deleteFromWish: {
+            isFetching: false,
+            success: false,
+            error: false,
+        },
     },
     reducers: {
         getAllProductsStart: (state) => {
@@ -68,6 +78,28 @@ const productsSlice = createSlice({
             state.deleteFromCart.isFetching = false;
             state.deleteFromCart.error = true;
         },
+        wishStart: (state) => {
+            state.addtoWish.isFetching = true;
+        },
+        wishSuccess: (state) => {
+            state.addtoWish.isFetching = false;
+            state.addtoWish.success = true;
+        },
+        wishFailed: (state) => {
+            state.addtoWish.isFetching = false;
+            state.addtoWish.error = true;
+        },
+        deleteWishStart: (state) => {
+            state.deleteFromWish.isFetching = true;
+        },
+        deleteWishSuccess: (state) => {
+            state.deleteFromWish.isFetching = false;
+            state.deleteFromWish.success = true;
+        },
+        deleteWishFailed: (state) => {
+            state.deleteFromWish.isFetching = false;
+            state.deleteFromWish.error = true;
+        },
     },
 });
 export const {
@@ -83,5 +115,11 @@ export const {
     deleteCartStart,
     deleteCartSuccess,
     deleteCartFailed,
+    wishStart,
+    wishSuccess,
+    wishFailed,
+    deleteWishStart,
+    deleteWishSuccess,
+    deleteWishFailed,
 } = productsSlice.actions;
 export default productsSlice.reducer;

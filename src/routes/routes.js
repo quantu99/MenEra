@@ -11,6 +11,7 @@ import CasualShoes from '../pages/Shoes/CasualShoes';
 import FormalShoes from '../pages/Shoes/FormalShoes';
 import Loafers from '../pages/Shoes/Loafers';
 import WorkShoes from '../pages/Shoes/WorkShoes';
+import WishList from '../pages/WishList/WishList';
 const publicRoutes = [
     { path: '/', component: Home },
     { path: 'login', component: Login },
@@ -24,6 +25,7 @@ const publicRoutes = [
     { path: '/loafers', component: Loafers },
     { path: '/:id', component: ProductDetail },
     { path: '/my-cart', component: Cart },
+    { path: '/my-wishlist', component: WishList },
     { path: '/my-account', component: Account },
 ];
 export { publicRoutes };

@@ -28,28 +28,35 @@ function Cart() {
             {user && (
                 <div className={cx('wrapper')}>
                     <h1 className={cx('title')}>Cart ({carts?.length})</h1>
-                    <div className={cx('container-wrapper')}>
-                        {carts?.map((cart, index) => (
-                            <div key={index} className={cx('container', 'row', 'no-gutters')}>
-                                <div className={cx('cart-div', 'col', 'l-12')}>
-                                    <img className={cx('image')} src={cart?.imageUrl} />
-                                    <div className={cx('info-div')}>
-                                        <p className={cx('name')}>{capitalizeString(cart?.name)}</p>
-                                        <p className={cx('price')}>
-                                            {cart.price.toLocaleString()}
-                                            <span style={{ textDecoration: 'underline' }}>đ</span>
-                                        </p>
-                                        <div className={cx('color-remove')}>
-                                            <p className={cx('color')}>{capitalizeString(cart?.color)}</p>
-                                            <p onClick={() => handleRemove(cart?._id)} className={cx('remove')}>
-                                                Remove
+                    {carts && (
+                        <div className={cx('container-wrapper')}>
+                            {carts?.map((cart, index) => (
+                                <div key={index} className={cx('container', 'row', 'no-gutters')}>
+                                    <div className={cx('cart-div', 'col', 'l-12')}>
+                                        <img className={cx('image')} src={cart?.imageUrl} />
+                                        <div className={cx('info-div')}>
+                                            <p className={cx('name')}>{capitalizeString(cart?.name)}</p>
+                                            <p className={cx('price')}>
+                                                {cart.price.toLocaleString()}
+                                                <span style={{ textDecoration: 'underline' }}>đ</span>
                                             </p>
+                                            <div className={cx('color-remove')}>
+                                                <p className={cx('color')}>{capitalizeString(cart?.color)}</p>
+                                                <p onClick={() => handleRemove(cart?._id)} className={cx('remove')}>
+                                                    Remove
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
-                    </div>
+                            ))}
+                        </div>
+                    )}
+                    {carts?.length === 0 && (
+                        <div className={cx('container-wrapper', 'wrapper-no-carts')}>
+                            <p>Your cart is empty. Add something now</p>
+                        </div>
+                    )}
 
                     <div className={cx('footer', 'row', 'no-gutters')}>
                         <div className={cx('footer-div', 'col', 'l-12')}>

@@ -6,6 +6,9 @@ import {
     getCartFailed,
     getCartStart,
     getCartSuccess,
+    getWishFailed,
+    getWishStart,
+    getWishSuccess,
     loginFailed,
     loginStart,
     loginSuccess,
@@ -24,12 +27,18 @@ import {
     deleteCartFailed,
     deleteCartStart,
     deleteCartSuccess,
+    deleteWishFailed,
+    deleteWishStart,
+    deleteWishSuccess,
     getAllProductsFailed,
     getAllProductsStart,
     getAllProductsSuccess,
     getDetailFailed,
     getDetailStart,
     getDetailSuccess,
+    wishFailed,
+    wishStart,
+    wishSuccess,
 } from './productsSlice';
 export const loginUser = async (user, dispatch, navigate) => {
     dispatch(loginStart());
@@ -134,6 +143,28 @@ export const deleteFromCart = async (id, userId, dispatch) => {
         dispatch(deleteCartFailed());
     }
 };
+export const addToWish = async (id, userId, dispatch) => {
+    dispatch(wishStart());
+    try {
+        const res = await axios.put('https://emc-api.onrender.com/v1/products/add/wish/' + id, {
+            user: userId,
+        });
+        dispatch(wishSuccess(res.data));
+    } catch (err) {
+        dispatch(wishFailed());
+    }
+};
+export const deleteFromWish = async (id, userId, dispatch) => {
+    dispatch(deleteWishStart());
+    try {
+        const res = await axios.put('https://emc-api.onrender.com/v1/products/delete/wish/' + id, {
+            user: userId,
+        });
+        dispatch(deleteWishSuccess(res.data));
+    } catch (err) {
+        dispatch(deleteWishFailed());
+    }
+};
 export const getCart = async (id, dispatch) => {
     dispatch(getCartStart());
     try {
@@ -141,5 +172,14 @@ export const getCart = async (id, dispatch) => {
         dispatch(getCartSuccess(res.data));
     } catch (err) {
         dispatch(getCartFailed());
+    }
+};
+export const getWish = async (id, dispatch) => {
+    dispatch(getWishStart());
+    try {
+        const res = await axios.get('https://emc-api.onrender.com/v1/auth/wish/' + id);
+        dispatch(getWishSuccess(res.data));
+    } catch (err) {
+        dispatch(getWishFailed());
     }
 };
