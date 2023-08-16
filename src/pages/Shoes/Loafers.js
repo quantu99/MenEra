@@ -3,7 +3,7 @@ import Footer from '../../components/Layouts/Footer/Footer';
 import styles from './Shoes.module.scss';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faChevronRight, faGear } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
 import { getAllProducts } from '../../redux/apiRequest';
@@ -52,23 +52,31 @@ function Loafers() {
                         />
                     </div>
                 </div>
-                <div className={cx('body', 'row', 'no-gutters')}>
-                    {loafers?.map((product) => (
-                        <Link
-                            style={{ textDecoration: 'none' }}
-                            to={`/${product._id}`}
-                            className={cx('product-div', 'col', 'l-3')}
-                        >
-                            <img className={cx('feature-image')} src={product.imageUrl} />
-                            <img className={cx('second-image')} src={product.imageUrl2} />
-                            <div className={cx('top-detail')}>
-                                <p className={cx('product-name')}>{capitalizeString(product.name)}</p>
-                                <p className={cx('product-price')}>{product.price.toLocaleString()}đ</p>
-                            </div>
-                            <p className={cx('product-color')}>{capitalizeString(product.color)}</p>
-                        </Link>
-                    ))}
-                </div>
+                {allProducts && (
+                    <div className={cx('body', 'row', 'no-gutters')}>
+                        {loafers?.map((product) => (
+                            <Link
+                                style={{ textDecoration: 'none' }}
+                                to={`/${product._id}`}
+                                className={cx('product-div', 'col', 'l-3')}
+                            >
+                                <img className={cx('feature-image')} src={product.imageUrl} />
+                                <img className={cx('second-image')} src={product.imageUrl2} />
+                                <div className={cx('top-detail')}>
+                                    <p className={cx('product-name')}>{capitalizeString(product.name)}</p>
+                                    <p className={cx('product-price')}>{product.price.toLocaleString()}đ</p>
+                                </div>
+                                <p className={cx('product-color')}>{capitalizeString(product.color)}</p>
+                            </Link>
+                        ))}
+                    </div>
+                )}
+                {!allProducts && (
+                    <div className={cx('no-products-div')}>
+                        <p className={cx('no-products-para')}>Please wait a moment, sorry for the inconvenience.</p>
+                        <FontAwesomeIcon className={cx('no-products-icon')} icon={faGear} />
+                    </div>
+                )}
             </div>
             <Footer />
         </div>

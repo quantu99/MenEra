@@ -20,15 +20,45 @@
 .container-wrapper {
     padding: 0px 40px;
     max-height: 400px;
+    min-height: 400px;
     overflow: hidden;
     overflow-y: auto;
 }
 .wrapper-no-carts {
-    padding: 164px 40px;
+    display: flex;
+    align-items: center;
     p {
         // text-align: center;
         font-family: 'Poppins', sans-serif;
         font-size: 2rem;
+    }
+}
+.no-carts {
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.no-carts-para {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: var(--charcoal-color);
+    display: flex;
+    align-items: center;
+}
+.no-carts-icon {
+    margin-left: 8px;
+    font-size: 1.6rem;
+    color: var(--tan-color);
+    animation: spinner 2s linear infinite;
+}
+@keyframes spinner {
+    from {
+        transform: rotate(0);
+    }
+    to {
+        transform: rotate(360deg);
     }
 }
 .container {

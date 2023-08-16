@@ -3,7 +3,7 @@ import Footer from '../../components/Layouts/Footer/Footer';
 import styles from './Shoes.module.scss';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faChevronRight, faCircleNotch, faGear } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
 import { getAllProducts, getProductDetail } from '../../redux/apiRequest';
@@ -74,8 +74,9 @@ function AllShoes() {
                     </div>
                 )}
                 {!allProducts && (
-                    <div>
-                        <p>Please wait...</p>
+                    <div className={cx('no-products-div')}>
+                        <p className={cx('no-products-para')}>Please wait a moment, sorry for the inconvenience.</p>
+                        <FontAwesomeIcon className={cx('no-products-icon')} icon={faGear} />
                     </div>
                 )}
             </div>

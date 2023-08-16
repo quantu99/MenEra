@@ -41,7 +41,7 @@
 }
 
 .body {
-    padding: 0px 30px 80px;
+    padding: 0px 30px 100px;
 }
 .product-div {
     padding: 0px 10px !important;
@@ -96,6 +96,93 @@
     font-family: 'Poppins', sans-serif;
     font-size: 14px;
     color: var(--charcoal-color);
+}
+.no-products-div {
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.no-products-para {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2rem;
+    font-weight: 400;
+    color: var(--charcoal-color);
+}
+.no-products-icon {
+    margin-left: 18px;
+    font-size: 2.5rem;
+    color: var(--tan-color);
+    animation: spinner 2s linear infinite;
+}
+@keyframes spinner {
+    from {
+        transform: rotate(0);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+.empty-wrapper {
+    min-height: 400px;
+    display: flex;
+    justify-content: center;
+}
+.empty-para {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2.5rem;
+}
+.no-user-wrapper {
+    min-height: 400px;
+}
+.no-user-para {
+    display: flex !important;
+    justify-content: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.4rem;
+    padding-top: 50px;
+    font-weight: 400;
+}
+.no-user-span {
+    text-decoration: none;
+    padding: 0px 5px;
+    color: var(--tan-color);
+    &:hover {
+        text-decoration: underline;
+    }
+}
+.btn {
+    width: 100%;
+    margin-top: 14px;
+    display: inline-block;
+    background: transparent;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 0.625rem;
+    letter-spacing: 0.3em;
+    color: var(--charcoal-color);
+    border-radius: 0;
+    padding: 18px 50px 20px;
+    transition: all 0.7s ease-out;
+    background: linear-gradient(
+        270deg,
+        rgba(223, 190, 106, 0.8),
+        rgba(146, 111, 52, 0.8),
+        rgba(34, 34, 34, 0),
+        rgba(34, 34, 34, 0)
+    );
+    background-position: 1% 50%;
+    background-size: 300% 300%;
+    text-decoration: none;
+    border: none;
+    border: 1px solid var(--charcoal-color);
+    cursor: pointer;
+}
+.btn:hover {
+    color: #fff;
+    border: 1px solid rgba(223, 190, 106, 0);
+    background-position: 99% 50%;
 }
 // Responsive
 .grid {
