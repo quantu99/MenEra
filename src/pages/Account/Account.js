@@ -130,14 +130,14 @@ function Account() {
                     <p className={cx('title')}>Settings</p>
                     <div className={cx('settings-menu')}>
                         <ul className={cx('setting-menu-list')}>
-                            <li className={cx('setting-menu-list-item')}>
+                            <Link className={cx('setting-menu-list-item')}>
                                 <FontAwesomeIcon className={cx('setting-icon')} icon={faUserTie} />
                                 <p className={cx('setting-para')}>Account Details</p>
-                            </li>
-                            <li className={cx('setting-menu-list-item')}>
+                            </Link>
+                            <Link to={'/my-wishlist'} className={cx('setting-menu-list-item')}>
                                 <FontAwesomeIcon className={cx('setting-icon')} icon={faGratipay} />
                                 <p className={cx('setting-para')}>My favorite</p>
-                            </li>{' '}
+                            </Link>{' '}
                             <li className={cx('setting-menu-list-item')}>
                                 <FontAwesomeIcon className={cx('setting-icon')} icon={faSuitcase} />
                                 <p className={cx('setting-para')}>My order</p>

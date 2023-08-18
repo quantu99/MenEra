@@ -2,6 +2,9 @@ import Account from '../pages/Account/Account';
 import Cart from '../pages/Cart/Cart';
 import Home from '../pages/Home/Home';
 import Login from '../pages/Login/Login';
+import Order from '../pages/Order/Order';
+import Payment from '../pages/Order/Payment';
+import Shipping from '../pages/Order/Shipping';
 import ProductDetail from '../pages/ProductDetail/ProductDetail';
 import Register from '../pages/Register/Register';
 import RegisterSuccess from '../pages/Register/RegisterSuccess';
@@ -26,6 +29,9 @@ const publicRoutes = [
     { path: '/:id', component: ProductDetail },
     { path: '/my-cart', component: Cart },
     { path: '/my-wishlist', component: WishList },
+    { path: '/order-info', component: Order },
+    { path: '/order-shipping', component: Shipping },
+    { path: '/order-payment', component: Payment },
     { path: '/my-account', component: Account },
 ];
 export { publicRoutes };

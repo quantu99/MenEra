@@ -32,6 +32,16 @@ const authSlice = createSlice({
             wishlist: null,
             error: false,
         },
+        order: {
+            isFetching: false,
+            success: false,
+            error: false,
+        },
+        getOrder: {
+            isFetching: false,
+            orderList: null,
+            error: false,
+        },
     },
     reducers: {
         loginStart: (state) => {
@@ -100,6 +110,28 @@ const authSlice = createSlice({
             state.getWish.isFetching = false;
             state.getWish.error = true;
         },
+        orderStart: (state) => {
+            state.order.isFetching = true;
+        },
+        orderSuccess: (state) => {
+            state.order.isFetching = false;
+            state.order.success = true;
+        },
+        orderFailed: (state) => {
+            state.order.isFetching = false;
+            state.order.error = true;
+        },
+        getOrderStart: (state) => {
+            state.getOrder.isFetching = true;
+        },
+        getOrderSuccess: (state, action) => {
+            state.getOrder.isFetching = false;
+            state.getOrder.orderList = action.payload;
+        },
+        getOrderFailed: (state) => {
+            state.getOrder.isFetching = false;
+            state.getOrder.error = true;
+        },
     },
 });
 export const {
@@ -121,5 +153,11 @@ export const {
     getWishStart,
     getWishSuccess,
     getWishFailed,
+    orderStart,
+    orderSuccess,
+    orderFailed,
+    getOrderStart,
+    getOrderSuccess,
+    getOrderFailed,
 } = authSlice.actions;
 export default authSlice.reducer;

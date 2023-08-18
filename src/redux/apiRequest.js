@@ -6,6 +6,9 @@ import {
     getCartFailed,
     getCartStart,
     getCartSuccess,
+    getOrderFailed,
+    getOrderStart,
+    getOrderSuccess,
     getWishFailed,
     getWishStart,
     getWishSuccess,
@@ -15,6 +18,9 @@ import {
     logoutFailed,
     logoutStart,
     logoutSuccess,
+    orderFailed,
+    orderStart,
+    orderSuccess,
     registerFailed,
     registerStart,
     registerSuccess,
@@ -181,5 +187,23 @@ export const getWish = async (id, dispatch) => {
         dispatch(getWishSuccess(res.data));
     } catch (err) {
         dispatch(getWishFailed());
+    }
+};
+export const order = async (id, dispatch) => {
+    dispatch(orderStart());
+    try {
+        const res = await axios.put('https://emc-api.onrender.com/v1/auth/order/', id);
+        dispatch(orderSuccess(res.data));
+    } catch (err) {
+        dispatch(orderFailed());
+    }
+};
+export const getOrder = async (id, dispatch) => {
+    dispatch(getOrderStart());
+    try {
+        const res = await axios.get('https://emc-api.onrender.com/v1/auth/order/', id);
+        dispatch(getOrderSuccess(res.data));
+    } catch (err) {
+        dispatch(getOrderFailed());
     }
 };
