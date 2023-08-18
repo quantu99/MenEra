@@ -4,16 +4,21 @@ import logo from '../../image/logo.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCart } from '../../redux/apiRequest';
+import { getCart, getInfoDetail, updateOrderInfo } from '../../redux/apiRequest';
 const cx = classNames.bind(styles);
 function Order() {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const user = useSelector((state) => state.auth.login?.currentUser);
     const id = user?._id;
     const carts = useSelector((state) => state.auth.getCart?.cart);
+    const infoDetail = useSelector((state) => state.auth.getInfoDetail?.infoDetail);
     const totalPrice = carts?.reduce((accumulator, cart) => accumulator + cart.price, 0);
+    useEffect(() => {
+        getInfoDetail(id, dispatch);
+    }, []);
     useEffect(() => {
         getCart(id, dispatch);
     }, []);
@@ -25,17 +30,27 @@ function Order() {
     }
     // validate
     const [values, setValues] = useState({
-        email: `${user?.email}`,
-        firstname: `${user?.firstname}`,
-        lastname: `${user?.lastname}`,
-        address: `${user?.address}`,
-        phone: user && user.phone ? user.phone : '',
+        email: `${infoDetail?.email}`,
+        firstname: `${infoDetail?.firstname}`,
+        lastname: `${infoDetail?.lastname}`,
+        address: `${infoDetail?.address}`,
+        phone: infoDetail && infoDetail.phone ? infoDetail.phone : '',
     });
     const handleChange = (e) => {
         setValues({
             ...values,
             [e.target.name]: e.target.value,
         });
+    };
+    const handleOrder = () => {
+        const newInfo = {
+            email: values.email,
+            firstname: values.firstname,
+            lastname: values.lastname,
+            address: values.address,
+            phone: values.phone,
+        };
+        updateOrderInfo(id, dispatch, navigate, newInfo);
     };
     return (
         <div className={cx('wrapper', 'grid')}>
@@ -54,9 +69,7 @@ function Order() {
                                 Information
                             </p>
                             <FontAwesomeIcon className={cx('navigate-icon')} icon={faChevronRight} />
-                            <Link to={'/order-shipping'} className={cx('navigate-para')}>
-                                Shipping
-                            </Link>
+                            <Link className={cx('navigate-para')}>Shipping</Link>
                             <FontAwesomeIcon className={cx('navigate-icon')} icon={faChevronRight} />
                             <p className={cx('navigate-para')}>Payment</p>
                         </div>
@@ -126,8 +139,10 @@ function Order() {
                                 <FontAwesomeIcon className={cx('footer-icon')} icon={faChevronLeft} />
                                 <p className={cx('footer-para')}>Return to Home</p>
                             </Link>
-                            <Link to={'/order-shipping'}>
-                                <button className={cx('btn')}>Continue to shipping</button>
+                            <Link>
+                                <button onClick={handleOrder} className={cx('btn')}>
+                                    Continue to shipping
+                                </button>
                             </Link>
                         </div>
                     </div>

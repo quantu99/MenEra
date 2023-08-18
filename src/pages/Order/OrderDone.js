@@ -8,7 +8,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCart, getInfoDetail, updateOrderInfo, updatePaymentInfo } from '../../redux/apiRequest';
 const cx = classNames.bind(styles);
-function Payment() {
+function OrderDone() {
     const [shipPrice, setShipPrice] = useState(40000);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -86,18 +86,12 @@ function Payment() {
                                     <p className={cx('shipping-title')}>Contact</p>
                                     <div className={cx('value-change')}>
                                         <p className={cx('shipping-value')}>{email}</p>
-                                        <Link to={'/order-info'} className={cx('change')}>
-                                            Change
-                                        </Link>
                                     </div>
                                 </div>
                                 <div className={cx('shipping-div-child', 'shipping-div-child-shipto')}>
                                     <p className={cx('shipping-title')}>Ship to</p>
                                     <div className={cx('value-change')}>
                                         <p className={cx('shipping-value')}>{address}</p>
-                                        <Link to={'/order-info'} className={cx('change')}>
-                                            Change
-                                        </Link>
                                     </div>
                                 </div>
                                 <div className={cx('shipping-div-child')}>
@@ -133,6 +127,7 @@ function Payment() {
                                 <div className={cx('payment-card-info')}>
                                     <div className={cx('payment-card-input-div', 'card-number')}>
                                         <input
+                                            disabled
                                             onChange={handleChange}
                                             name="cardNumber"
                                             value={values?.cardNumber}
@@ -147,6 +142,7 @@ function Payment() {
                                     <div className={cx('payment-card-date')}>
                                         <div className={cx('payment-card-input-div', 'month')}>
                                             <input
+                                                disabled
                                                 onChange={handleChange}
                                                 name="cardMonth"
                                                 value={values?.cardMonth}
@@ -156,6 +152,7 @@ function Payment() {
                                         </div>
                                         <div className={cx('payment-card-input-div', 'year')}>
                                             <input
+                                                disabled
                                                 onChange={handleChange}
                                                 name="cardYear"
                                                 value={values?.cardYear}
@@ -167,6 +164,7 @@ function Payment() {
                                     <div className={cx('payment-card-last')}>
                                         <div className={cx('payment-card-input-div', 'cvv')}>
                                             <input
+                                                disabled
                                                 onChange={handleChange}
                                                 name="cvv"
                                                 value={values?.cvv}
@@ -181,13 +179,17 @@ function Payment() {
                                 </div>
                             </div>
                         </div>
+                        <p className={cx('verify-para')}>
+                            Please check your contact and payment information again. If they're all clear, click "Order
+                            now" to complete your order.
+                        </p>
                         <div className={cx('footer-div')}>
                             <Link to={'/order-shipping'} className={cx('footer-return')}>
                                 <FontAwesomeIcon className={cx('footer-icon')} icon={faChevronLeft} />
                                 <p className={cx('footer-para')}>Return to Shipping</p>
                             </Link>
-                            <Link to={'/order-complete'} onClick={handleOrder}>
-                                <button className={cx('btn')}>Complete Order</button>
+                            <Link onClick={handleOrder}>
+                                <button className={cx('btn')}>Order now</button>
                             </Link>
                         </div>
                     </div>
@@ -239,4 +241,4 @@ function Payment() {
     );
 }
 
-export default Payment;
+export default OrderDone;

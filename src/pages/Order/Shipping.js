@@ -6,7 +6,7 @@ import { faChevronLeft, faChevronRight, faCircleDot } from '@fortawesome/free-so
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCart } from '../../redux/apiRequest';
+import { getCart, getInfoDetail } from '../../redux/apiRequest';
 const cx = classNames.bind(styles);
 function Shipping() {
     const dispatch = useDispatch();
@@ -16,6 +16,10 @@ function Shipping() {
     const carts = useSelector((state) => state.auth.getCart?.cart);
     const subTotalPrice = carts?.reduce((accumulator, cart) => accumulator + cart.price, 0);
     const totalPrice = shipPrice + subTotalPrice;
+    const infoDetail = useSelector((state) => state.auth.getInfoDetail?.infoDetail);
+    useEffect(() => {
+        getInfoDetail(id, dispatch);
+    }, []);
     useEffect(() => {
         getCart(id, dispatch);
     }, []);
@@ -25,8 +29,8 @@ function Shipping() {
             return l.toUpperCase();
         });
     }
-    const email = user?.email;
-    const address = user?.address;
+    const email = infoDetail?.email;
+    const address = infoDetail?.address;
     return (
         <div className={cx('wrapper', 'grid')}>
             <div className={cx('container', 'row', 'no-gutters')}>

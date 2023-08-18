@@ -3,6 +3,7 @@ import Cart from '../pages/Cart/Cart';
 import Home from '../pages/Home/Home';
 import Login from '../pages/Login/Login';
 import Order from '../pages/Order/Order';
+import OrderDone from '../pages/Order/OrderDone';
 import Payment from '../pages/Order/Payment';
 import Shipping from '../pages/Order/Shipping';
 import ProductDetail from '../pages/ProductDetail/ProductDetail';
@@ -32,6 +33,7 @@ const publicRoutes = [
     { path: '/order-info', component: Order },
     { path: '/order-shipping', component: Shipping },
     { path: '/order-payment', component: Payment },
+    { path: 'order-complete', component: OrderDone },
     { path: '/my-account', component: Account },
 ];
 export { publicRoutes };

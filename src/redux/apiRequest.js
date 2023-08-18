@@ -6,6 +6,9 @@ import {
     getCartFailed,
     getCartStart,
     getCartSuccess,
+    getInfoDetailFailed,
+    getInfoDetailStart,
+    getInfoDetailSuccess,
     getOrderFailed,
     getOrderStart,
     getOrderSuccess,
@@ -24,6 +27,9 @@ import {
     registerFailed,
     registerStart,
     registerSuccess,
+    updateOrderInfoFailed,
+    updateOrderInfoStart,
+    updateOrderInfoSuccess,
 } from './authSlice';
 import { getAllUsersFailed, getAllUsersStart, getAllUsersSuccess } from './userSlice';
 import {
@@ -205,5 +211,43 @@ export const getOrder = async (id, dispatch) => {
         dispatch(getOrderSuccess(res.data));
     } catch (err) {
         dispatch(getOrderFailed());
+    }
+};
+export const updateOrderInfo = async (id, dispatch, navigate, newInfo) => {
+    dispatch(updateOrderInfoStart());
+    try {
+        const res = await axios.put('https://emc-api.onrender.com/v1/auth/order/info/' + id, {
+            email: newInfo.email,
+            phone: newInfo.phone,
+            address: newInfo.address,
+        });
+        dispatch(updateOrderInfoSuccess(res.data));
+        navigate('/order-shipping');
+    } catch (err) {
+        dispatch(updateOrderInfoFailed());
+    }
+};
+export const updatePaymentInfo = async (id, dispatch, newInfo) => {
+    dispatch(updateOrderInfoStart());
+    try {
+        const res = await axios.put('https://emc-api.onrender.com/v1/auth/order/info/' + id, {
+            cardNumber: newInfo.cardNumber,
+            cardMonth: newInfo.cardMonth,
+            cardYear: newInfo.cardYear,
+            cvv: newInfo.cvv,
+        });
+        dispatch(updateOrderInfoSuccess(res.data));
+        // navigate('/order-shipping');
+    } catch (err) {
+        dispatch(updateOrderInfoFailed());
+    }
+};
+export const getInfoDetail = async (id, dispatch) => {
+    dispatch(getInfoDetailStart());
+    try {
+        const res = await axios.get('https://emc-api.onrender.com/v1/user/' + id);
+        dispatch(getInfoDetailSuccess(res.data));
+    } catch (err) {
+        dispatch(getInfoDetailFailed());
     }
 };
