@@ -138,10 +138,10 @@ function Account() {
                                 <FontAwesomeIcon className={cx('setting-icon')} icon={faGratipay} />
                                 <p className={cx('setting-para')}>My favorite</p>
                             </Link>{' '}
-                            <li className={cx('setting-menu-list-item')}>
+                            <Link to={'/my-order'} className={cx('setting-menu-list-item')}>
                                 <FontAwesomeIcon className={cx('setting-icon')} icon={faSuitcase} />
                                 <p className={cx('setting-para')}>My order</p>
-                            </li>
+                            </Link>
                         </ul>
                     </div>
                 </div>

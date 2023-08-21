@@ -9,9 +9,6 @@ import {
     getInfoDetailFailed,
     getInfoDetailStart,
     getInfoDetailSuccess,
-    getOrderFailed,
-    getOrderStart,
-    getOrderSuccess,
     getWishFailed,
     getWishStart,
     getWishSuccess,
@@ -21,15 +18,15 @@ import {
     logoutFailed,
     logoutStart,
     logoutSuccess,
-    orderFailed,
-    orderStart,
-    orderSuccess,
     registerFailed,
     registerStart,
     registerSuccess,
     updateOrderInfoFailed,
     updateOrderInfoStart,
     updateOrderInfoSuccess,
+    getMyOrderFailed,
+    getMyOrderStart,
+    getMyOrderSuccess,
 } from './authSlice';
 import { getAllUsersFailed, getAllUsersStart, getAllUsersSuccess } from './userSlice';
 import {
@@ -52,6 +49,14 @@ import {
     wishStart,
     wishSuccess,
 } from './productsSlice';
+import {
+    addNewOrderFailed,
+    addNewOrderStart,
+    addNewOrderSuccess,
+    getOrderDetailFailed,
+    getOrderDetailStart,
+    getOrderDetailSuccess,
+} from './orderSlice';
 export const loginUser = async (user, dispatch, navigate) => {
     dispatch(loginStart());
     try {
@@ -195,24 +200,6 @@ export const getWish = async (id, dispatch) => {
         dispatch(getWishFailed());
     }
 };
-export const order = async (id, dispatch) => {
-    dispatch(orderStart());
-    try {
-        const res = await axios.put('https://emc-api.onrender.com/v1/auth/order/', id);
-        dispatch(orderSuccess(res.data));
-    } catch (err) {
-        dispatch(orderFailed());
-    }
-};
-export const getOrder = async (id, dispatch) => {
-    dispatch(getOrderStart());
-    try {
-        const res = await axios.get('https://emc-api.onrender.com/v1/auth/order/', id);
-        dispatch(getOrderSuccess(res.data));
-    } catch (err) {
-        dispatch(getOrderFailed());
-    }
-};
 export const updateOrderInfo = async (id, dispatch, navigate, newInfo) => {
     dispatch(updateOrderInfoStart());
     try {
@@ -227,7 +214,7 @@ export const updateOrderInfo = async (id, dispatch, navigate, newInfo) => {
         dispatch(updateOrderInfoFailed());
     }
 };
-export const updatePaymentInfo = async (id, dispatch, newInfo) => {
+export const updatePaymentInfo = async (id, dispatch, newInfo, navigate) => {
     dispatch(updateOrderInfoStart());
     try {
         const res = await axios.put('https://emc-api.onrender.com/v1/auth/order/info/' + id, {
@@ -237,6 +224,7 @@ export const updatePaymentInfo = async (id, dispatch, newInfo) => {
             cvv: newInfo.cvv,
         });
         dispatch(updateOrderInfoSuccess(res.data));
+        navigate('/order-complete');
         // navigate('/order-shipping');
     } catch (err) {
         dispatch(updateOrderInfoFailed());
@@ -249,5 +237,35 @@ export const getInfoDetail = async (id, dispatch) => {
         dispatch(getInfoDetailSuccess(res.data));
     } catch (err) {
         dispatch(getInfoDetailFailed());
+    }
+};
+export const addNewOrder = async (userId, dispatch) => {
+    dispatch(addNewOrderStart());
+    try {
+        const res = await axios.post('https://emc-api.onrender.com/v1/order/add', {
+            userId: userId,
+        });
+        dispatch(addNewOrderSuccess(res.data));
+    } catch (err) {
+        dispatch(addNewOrderFailed());
+    }
+};
+export const getMyOrder = async (id, dispatch) => {
+    dispatch(getMyOrderStart());
+    try {
+        const res = await axios.get('https://emc-api.onrender.com/v1/auth/order/' + id);
+        dispatch(getMyOrderSuccess(res.data));
+    } catch (err) {
+        dispatch(getMyOrderFailed());
+    }
+};
+export const getOrderDetail = async (id, dispatch, navigate) => {
+    dispatch(getOrderDetailStart());
+    try {
+        const res = await axios.get('https://emc-api.onrender.com/v1/order/' + id);
+        dispatch(getOrderDetailSuccess(res.data));
+        navigate(`/my-order-detail/${id}`);
+    } catch (err) {
+        dispatch(getOrderDetailFailed());
     }
 };

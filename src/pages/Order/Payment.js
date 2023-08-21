@@ -52,7 +52,7 @@ function Payment() {
             cardYear: values.cardYear,
             cvv: values.cvv,
         };
-        updatePaymentInfo(id, dispatch, newInfo);
+        updatePaymentInfo(id, dispatch, newInfo, navigate);
     };
     return (
         <div className={cx('wrapper', 'grid')}>
@@ -186,7 +186,7 @@ function Payment() {
                                 <FontAwesomeIcon className={cx('footer-icon')} icon={faChevronLeft} />
                                 <p className={cx('footer-para')}>Return to Shipping</p>
                             </Link>
-                            <Link to={'/order-complete'} onClick={handleOrder}>
+                            <Link onClick={handleOrder}>
                                 <button className={cx('btn')}>Complete Order</button>
                             </Link>
                         </div>

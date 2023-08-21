@@ -32,16 +32,6 @@ const authSlice = createSlice({
             wishlist: null,
             error: false,
         },
-        order: {
-            isFetching: false,
-            success: false,
-            error: false,
-        },
-        getOrder: {
-            isFetching: false,
-            orderList: null,
-            error: false,
-        },
         updateOrderInfo: {
             isFetching: false,
             success: false,
@@ -50,6 +40,11 @@ const authSlice = createSlice({
         getInfoDetail: {
             isFetching: false,
             infoDetail: null,
+            error: false,
+        },
+        getMyOrder: {
+            isFetching: false,
+            myOrder: null,
             error: false,
         },
     },
@@ -120,28 +115,6 @@ const authSlice = createSlice({
             state.getWish.isFetching = false;
             state.getWish.error = true;
         },
-        orderStart: (state) => {
-            state.order.isFetching = true;
-        },
-        orderSuccess: (state) => {
-            state.order.isFetching = false;
-            state.order.success = true;
-        },
-        orderFailed: (state) => {
-            state.order.isFetching = false;
-            state.order.error = true;
-        },
-        getOrderStart: (state) => {
-            state.getOrder.isFetching = true;
-        },
-        getOrderSuccess: (state, action) => {
-            state.getOrder.isFetching = false;
-            state.getOrder.orderList = action.payload;
-        },
-        getOrderFailed: (state) => {
-            state.getOrder.isFetching = false;
-            state.getOrder.error = true;
-        },
         updateOrderInfoStart: (state) => {
             state.updateOrderInfo.isFetching = true;
         },
@@ -164,6 +137,17 @@ const authSlice = createSlice({
             state.getInfoDetail.isFetching = false;
             state.getInfoDetail.error = true;
         },
+        getMyOrderStart: (state) => {
+            state.getMyOrder.isFetching = true;
+        },
+        getMyOrderSuccess: (state, action) => {
+            state.getMyOrder.isFetching = false;
+            state.getMyOrder.myOrder = action.payload;
+        },
+        getMyOrderFailed: (state) => {
+            state.getMyOrder.isFetching = false;
+            state.getMyOrder.error = true;
+        },
     },
 });
 export const {
@@ -185,17 +169,14 @@ export const {
     getWishStart,
     getWishSuccess,
     getWishFailed,
-    orderStart,
-    orderSuccess,
-    orderFailed,
-    getOrderStart,
-    getOrderSuccess,
-    getOrderFailed,
     updateOrderInfoStart,
     updateOrderInfoSuccess,
     updateOrderInfoFailed,
     getInfoDetailStart,
     getInfoDetailSuccess,
     getInfoDetailFailed,
+    getMyOrderStart,
+    getMyOrderSuccess,
+    getMyOrderFailed,
 } = authSlice.actions;
 export default authSlice.reducer;

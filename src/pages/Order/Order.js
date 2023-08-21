@@ -30,10 +30,10 @@ function Order() {
     }
     // validate
     const [values, setValues] = useState({
-        email: `${infoDetail?.email}`,
-        firstname: `${infoDetail?.firstname}`,
-        lastname: `${infoDetail?.lastname}`,
-        address: `${infoDetail?.address}`,
+        email: infoDetail && infoDetail.email ? infoDetail.email : '',
+        firstname: infoDetail && infoDetail.firstname ? infoDetail.firstname : '',
+        lastname: infoDetail && infoDetail.lastname ? infoDetail.lastname : '',
+        address: infoDetail && infoDetail.address ? infoDetail.address : '',
         phone: infoDetail && infoDetail.phone ? infoDetail.phone : '',
     });
     const handleChange = (e) => {

@@ -1,4 +1,4 @@
-import styles from './Order.module.scss';
+import styles from './MyOrderDetail.module.scss';
 import classNames from 'classnames/bind';
 import logo from '../../image/logo.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -6,15 +6,14 @@ import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { addNewOrder, getCart, getInfoDetail, updateOrderInfo, updatePaymentInfo } from '../../redux/apiRequest';
+import { getCart, getInfoDetail, updateOrderInfo, updatePaymentInfo } from '../../redux/apiRequest';
 const cx = classNames.bind(styles);
-function OrderDone() {
+function MyOrderDetail() {
     const [shipPrice, setShipPrice] = useState(40000);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const user = useSelector((state) => state.auth.login?.currentUser);
     const id = user?._id;
-    console.log(id);
     const carts = useSelector((state) => state.auth.getCart?.cart);
     const subTotalPrice = carts?.reduce((accumulator, cart) => accumulator + cart.price, 0);
     const totalPrice = shipPrice + subTotalPrice;
@@ -25,8 +24,7 @@ function OrderDone() {
     const email = infoDetail?.email;
     const address = infoDetail?.address;
     useEffect(() => {
-        const userId = id;
-        getCart(userId, dispatch);
+        getCart(id, dispatch);
     }, []);
     // Uppercase first letter of word
     function capitalizeString(str) {
@@ -48,7 +46,13 @@ function OrderDone() {
         });
     };
     const handleOrder = () => {
-        addNewOrder(id, dispatch);
+        const newInfo = {
+            cardNumber: values.cardNumber,
+            cardMonth: values.cardMonth,
+            cardYear: values.cardYear,
+            cvv: values.cvv,
+        };
+        updatePaymentInfo(id, dispatch, newInfo, navigate);
     };
     return (
         <div className={cx('wrapper', 'grid')}>
@@ -82,12 +86,18 @@ function OrderDone() {
                                     <p className={cx('shipping-title')}>Contact</p>
                                     <div className={cx('value-change')}>
                                         <p className={cx('shipping-value')}>{email}</p>
+                                        <Link to={'/order-info'} className={cx('change')}>
+                                            Change
+                                        </Link>
                                     </div>
                                 </div>
                                 <div className={cx('shipping-div-child', 'shipping-div-child-shipto')}>
                                     <p className={cx('shipping-title')}>Ship to</p>
                                     <div className={cx('value-change')}>
                                         <p className={cx('shipping-value')}>{address}</p>
+                                        <Link to={'/order-info'} className={cx('change')}>
+                                            Change
+                                        </Link>
                                     </div>
                                 </div>
                                 <div className={cx('shipping-div-child')}>
@@ -123,7 +133,6 @@ function OrderDone() {
                                 <div className={cx('payment-card-info')}>
                                     <div className={cx('payment-card-input-div', 'card-number')}>
                                         <input
-                                            disabled
                                             onChange={handleChange}
                                             name="cardNumber"
                                             value={values?.cardNumber}
@@ -138,7 +147,6 @@ function OrderDone() {
                                     <div className={cx('payment-card-date')}>
                                         <div className={cx('payment-card-input-div', 'month')}>
                                             <input
-                                                disabled
                                                 onChange={handleChange}
                                                 name="cardMonth"
                                                 value={values?.cardMonth}
@@ -148,7 +156,6 @@ function OrderDone() {
                                         </div>
                                         <div className={cx('payment-card-input-div', 'year')}>
                                             <input
-                                                disabled
                                                 onChange={handleChange}
                                                 name="cardYear"
                                                 value={values?.cardYear}
@@ -160,7 +167,6 @@ function OrderDone() {
                                     <div className={cx('payment-card-last')}>
                                         <div className={cx('payment-card-input-div', 'cvv')}>
                                             <input
-                                                disabled
                                                 onChange={handleChange}
                                                 name="cvv"
                                                 value={values?.cvv}
@@ -175,19 +181,13 @@ function OrderDone() {
                                 </div>
                             </div>
                         </div>
-                        <p className={cx('verify-para')}>
-                            Please check your contact and payment information again. If they're all clear, click "Order
-                            now" to complete your order.
-                        </p>
                         <div className={cx('footer-div')}>
-                            <Link to={'/order-payment'} className={cx('footer-return')}>
+                            <Link to={'/order-shipping'} className={cx('footer-return')}>
                                 <FontAwesomeIcon className={cx('footer-icon')} icon={faChevronLeft} />
-                                <p className={cx('footer-para')}>Return to Payment</p>
+                                <p className={cx('footer-para')}>Return to Shipping</p>
                             </Link>
-                            <Link>
-                                <button onClick={handleOrder} className={cx('btn')}>
-                                    Order now
-                                </button>
+                            <Link onClick={handleOrder}>
+                                <button className={cx('btn')}>Complete Order</button>
                             </Link>
                         </div>
                     </div>
@@ -239,4 +239,4 @@ function OrderDone() {
     );
 }
 
-export default OrderDone;
+export default MyOrderDetail;
