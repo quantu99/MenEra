@@ -358,6 +358,7 @@
 }
 .payment-info-div {
     border: 1px solid var(--tan-color);
+    border-radius: 5px;
 }
 .payment-info-header {
     display: flex;
@@ -453,6 +454,137 @@
     font-size: 15px;
     line-height: 1.5;
 }
+.process-div {
+    padding-top: 50px;
+}
+.process-title {
+    font-family: 'Poppins', sans-serif;
+    color: var(--gold-color);
+    padding-bottom: 50px;
+    font-size: 20px;
+    font-weight: 400;
+}
+.process-bar {
+    position: relative;
+    width: 100%;
+    height: 8px;
+    border-radius: 10px;
+    border: 1px solid var(--tan-color);
+    background-color: var(--cream-color);
+}
+// .process-bar::after {
+//     content: '';
+//     position: absolute;
+//     left: 0;
+//     width: 25%;
+//     height: 100%;
+//     background-color: var(--tan-color);
+// }
+.process-bar-1st-child {
+    position: absolute;
+    left: -1px;
+    top: -15px;
+    display: flex;
+    flex-direction: column;
+}
+.active::after {
+    position: absolute;
+    content: '';
+    width: 120px;
+    height: 5px;
+    top: 52%;
+    left: 100%;
+    transform: translateY(-50%);
+    background-color: var(--tan-color);
+}
+.process-bar-2nd-child {
+    position: absolute;
+    left: 140px;
+    top: -15px;
+}
+.active::after {
+    position: absolute;
+    content: '';
+    width: 120px;
+    height: 5px;
+    top: 52%;
+    left: 100%;
+    transform: translateY(-50%);
+    background-color: var(--tan-color);
+}
+.process-bar-3rd-child {
+    position: absolute;
+    left: 280px;
+    top: -15px;
+}
+.active::after {
+    position: absolute;
+    content: '';
+    width: 120px;
+    height: 5px;
+    top: 52%;
+    left: 100%;
+    transform: translateY(-50%);
+    background-color: var(--tan-color);
+}
+.process-bar-4th-child {
+    position: absolute;
+    left: 420px;
+    top: -15px;
+}
+.active::after {
+    position: absolute;
+    content: '';
+    width: 120px;
+    height: 5px;
+    top: 52%;
+    left: 100%;
+    transform: translateY(-50%);
+    background-color: var(--tan-color);
+}
+.process-bar-5th-child {
+    position: absolute;
+    left: 560px;
+    top: -15px;
+}
+.process-bar-icon-div {
+    width: 35px;
+    height: 35px;
+    background-color: var(--cream-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+}
+.process-icon {
+    font-size: 20px;
+    transform: translateX(35%);
+    color: var(--tan-color);
+    animation: loading 2s linear infinite;
+}
+.process-icon-check {
+    font-size: 20px;
+    transform: translateX(50%);
+    color: var(--tan-color);
+}
+@keyframes loading {
+    from {
+        transform: translateX(35%) rotate(0);
+    }
+    to {
+        transform: translateX(35%) rotate(360deg);
+    }
+}
+.process-para {
+    padding-top: 30px;
+    width: 105%;
+    display: flex;
+    justify-content: space-between;
+    p {
+        color: var(--gold-color);
+        width: 10%;
+    }
+}
+
 // Responsive
 .grid {
     width: 100%;

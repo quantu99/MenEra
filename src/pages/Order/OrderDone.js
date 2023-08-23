@@ -14,7 +14,6 @@ function OrderDone() {
     const navigate = useNavigate();
     const user = useSelector((state) => state.auth.login?.currentUser);
     const id = user?._id;
-    console.log(id);
     const carts = useSelector((state) => state.auth.getCart?.cart);
     const subTotalPrice = carts?.reduce((accumulator, cart) => accumulator + cart.price, 0);
     const totalPrice = shipPrice + subTotalPrice;
@@ -48,7 +47,7 @@ function OrderDone() {
         });
     };
     const handleOrder = () => {
-        addNewOrder(id, dispatch);
+        addNewOrder(id, dispatch, navigate);
     };
     return (
         <div className={cx('wrapper', 'grid')}>

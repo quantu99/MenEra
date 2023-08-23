@@ -38,38 +38,50 @@ function MyOrder() {
                 <h1 className={cx('order-header-history')}>Order history</h1>
             </div>
             <div className={cx('order-div')}>
-                {myOrder?.map((order, index) => (
-                    <div
-                        onClick={() => handleGetDetail(order?._id)}
-                        key={index}
-                        className={cx('container', 'row', 'no-gutters')}
-                    >
-                        <div className={cx('id-div')}>
-                            <p className={cx('title')}>Order Id</p>
-                            <p className={cx('order-code')}> #{order?._id}</p>
-                        </div>
-                        <div className={cx('date-div')}>
-                            <p className={cx('title')}>At</p>
-                            <p className={cx('order-date')}>{order.orderDate.replace('T', ', ').slice(0, 20)}</p>
-                            <p className={cx('date-para')}>
-                                This order is created at {order.orderDate.replace('T', ', ').slice(0, 20)}
-                                <div className={cx('something')}></div>
-                            </p>
-                        </div>
-                        <div className={cx('total-div')}>
-                            <p className={cx('title')}>Total</p>
-                            <p className={cx('order-total')}>
-                                {calculateTotal(order.products).toLocaleString()}
-                                <span style={{ textDecoration: 'underline' }}>đ</span>
-                            </p>
-                        </div>
-                        <div className={cx('progress-div')}>
-                            <p className={cx('title')}>Order status</p>
-                            {!orderProgress && <FontAwesomeIcon className={cx('process-icon')} icon={faGear} />}
-                            <p className={cx('process-para')}>Processing...</p>
-                        </div>
-                    </div>
-                ))}
+                {myOrder && (
+                    <>
+                        {myOrder?.map((order, index) => (
+                            <div
+                                onClick={() => handleGetDetail(order?._id)}
+                                key={index}
+                                className={cx('container', 'row', 'no-gutters')}
+                            >
+                                <div className={cx('id-div')}>
+                                    <p className={cx('title')}>Order Id</p>
+                                    <p className={cx('order-code')}> #{order?._id}</p>
+                                </div>
+                                <div className={cx('date-div')}>
+                                    <p className={cx('title')}>At</p>
+                                    <p className={cx('order-date')}>
+                                        {order.orderDate.replace('T', ', ').slice(0, 20)}
+                                    </p>
+                                    <p className={cx('date-para')}>
+                                        This order is created at {order.orderDate.replace('T', ', ').slice(0, 20)}
+                                        <div className={cx('something')}></div>
+                                    </p>
+                                </div>
+                                <div className={cx('total-div')}>
+                                    <p className={cx('title')}>Total</p>
+                                    <p className={cx('order-total')}>
+                                        {calculateTotal(order.products).toLocaleString()}
+                                        <span style={{ textDecoration: 'underline' }}>đ</span>
+                                    </p>
+                                </div>
+                                <div className={cx('progress-div')}>
+                                    <p className={cx('title')}>Order status</p>
+                                    {!orderProgress && <FontAwesomeIcon className={cx('process-icon')} icon={faGear} />}
+                                    <p className={cx('process-para')}>Processing...</p>
+                                </div>
+                            </div>
+                        ))}
+                    </>
+                )}
+                {!myOrder && (
+                    <p className={cx('loading-api-para')}>
+                        Please wait for moment. Sorry for the inconvenience.
+                        <FontAwesomeIcon className={cx('loading-api-icon')} icon={faGear} />
+                    </p>
+                )}
             </div>
             <Footer />
         </div>

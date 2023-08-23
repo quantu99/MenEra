@@ -2,27 +2,28 @@ import styles from './MyOrderDetail.module.scss';
 import classNames from 'classnames/bind';
 import logo from '../../image/logo.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faChevronRight, faSpinner, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCart, getInfoDetail, updateOrderInfo, updatePaymentInfo } from '../../redux/apiRequest';
+import { getCart, getOrderDetail } from '../../redux/apiRequest';
 const cx = classNames.bind(styles);
 function MyOrderDetail() {
     const [shipPrice, setShipPrice] = useState(40000);
+    const orderId = useParams().id;
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const user = useSelector((state) => state.auth.login?.currentUser);
     const id = user?._id;
-    const carts = useSelector((state) => state.auth.getCart?.cart);
-    const subTotalPrice = carts?.reduce((accumulator, cart) => accumulator + cart.price, 0);
-    const totalPrice = shipPrice + subTotalPrice;
-    const infoDetail = useSelector((state) => state.auth.getInfoDetail?.infoDetail);
+    const orderDetail = useSelector((state) => state.order.getOrderDetail?.orderDetail);
+    const orderProcess = orderDetail?.orderProcess;
+    console.log(orderProcess);
+    const email = orderDetail?.user?.email || '';
+    const address = orderDetail?.user?.address;
+    const cardNumber = orderDetail?.user?.cardNumber;
     useEffect(() => {
-        getInfoDetail(id, dispatch);
-    }, []);
-    const email = infoDetail?.email;
-    const address = infoDetail?.address;
+        getOrderDetail(orderId, dispatch, navigate);
+    }, [orderProcess]);
     useEffect(() => {
         getCart(id, dispatch);
     }, []);
@@ -32,27 +33,21 @@ function MyOrderDetail() {
             return l.toUpperCase();
         });
     }
-    // set validate
-    const [values, setValues] = useState({
-        cardNumber: infoDetail?.cardNumber,
-        cardMonth: infoDetail?.cardMonth,
-        cardYear: infoDetail?.cardYear,
-        cvv: infoDetail?.cvv,
-    });
-    const handleChange = (e) => {
-        setValues({
-            ...values,
-            [e.target.name]: e.target.value,
+    const calculateSubTotal = (products) => {
+        let total = 0;
+        products?.forEach((product) => {
+            total += product.price;
         });
+        return total;
     };
-    const handleOrder = () => {
-        const newInfo = {
-            cardNumber: values.cardNumber,
-            cardMonth: values.cardMonth,
-            cardYear: values.cardYear,
-            cvv: values.cvv,
-        };
-        updatePaymentInfo(id, dispatch, newInfo, navigate);
+    const calculateTotal = (products) => {
+        let total = 0;
+        products.forEach((product) => {
+            total += product.price;
+        });
+        const shipPrice = 40000;
+        const totalPrice = total + shipPrice;
+        return totalPrice;
     };
     return (
         <div className={cx('wrapper', 'grid')}>
@@ -64,19 +59,11 @@ function MyOrderDetail() {
                     </Link>
                     <div className={cx('info-div')}>
                         <div className={cx('navigate-div')}>
-                            <Link to={'/order-info'} className={cx('navigate-para')}>
-                                Information
-                            </Link>
-                            <FontAwesomeIcon className={cx('navigate-icon')} icon={faChevronRight} />
-                            <Link to={'/order-shipping'} className={cx('navigate-para')}>
-                                Shipping
-                            </Link>
-                            <FontAwesomeIcon className={cx('navigate-icon')} icon={faChevronRight} />
                             <p
-                                style={{ fontWeight: '500', textDecoration: 'underline' }}
+                                style={{ fontSize: '20px', fontWeight: '500', color: 'var(--cream-color)' }}
                                 className={cx('navigate-para')}
                             >
-                                Payment
+                                Order #{orderDetail?._id}
                             </p>
                         </div>
                         <div className={cx('contact-div')}>
@@ -86,18 +73,12 @@ function MyOrderDetail() {
                                     <p className={cx('shipping-title')}>Contact</p>
                                     <div className={cx('value-change')}>
                                         <p className={cx('shipping-value')}>{email}</p>
-                                        <Link to={'/order-info'} className={cx('change')}>
-                                            Change
-                                        </Link>
                                     </div>
                                 </div>
                                 <div className={cx('shipping-div-child', 'shipping-div-child-shipto')}>
                                     <p className={cx('shipping-title')}>Ship to</p>
                                     <div className={cx('value-change')}>
                                         <p className={cx('shipping-value')}>{address}</p>
-                                        <Link to={'/order-info'} className={cx('change')}>
-                                            Change
-                                        </Link>
                                     </div>
                                 </div>
                                 <div className={cx('shipping-div-child')}>
@@ -113,8 +94,9 @@ function MyOrderDetail() {
                             </div>
                         </div>
                         <div className={cx('payment-div')}>
-                            <p className={cx('payment-title')}>Payment</p>
-                            <p className={cx('payment-note')}>All transactions are secured and encrypted.</p>
+                            <p style={{ paddingBottom: '20px' }} className={cx('payment-title')}>
+                                Payment
+                            </p>
                             <div className={cx('payment-info-div')}>
                                 <div className={cx('payment-info-header')}>
                                     <p className={cx('header-title')}>Credit Card</p>
@@ -133,77 +115,198 @@ function MyOrderDetail() {
                                 <div className={cx('payment-card-info')}>
                                     <div className={cx('payment-card-input-div', 'card-number')}>
                                         <input
-                                            onChange={handleChange}
                                             name="cardNumber"
-                                            value={values?.cardNumber}
                                             placeholder="Card number "
                                             className={cx('payment-card-input')}
+                                            value={cardNumber}
+                                            disabled
                                         />
                                         <img
                                             className={cx('card-number-image')}
                                             src="https://webservices.global-e.com/content/images/paymentMethods/pm.svg"
                                         />
                                     </div>
-                                    <div className={cx('payment-card-date')}>
-                                        <div className={cx('payment-card-input-div', 'month')}>
-                                            <input
-                                                onChange={handleChange}
-                                                name="cardMonth"
-                                                value={values?.cardMonth}
-                                                placeholder="Month"
-                                                className={cx('payment-card-input')}
-                                            />
-                                        </div>
-                                        <div className={cx('payment-card-input-div', 'year')}>
-                                            <input
-                                                onChange={handleChange}
-                                                name="cardYear"
-                                                value={values?.cardYear}
-                                                placeholder="Year"
-                                                className={cx('payment-card-input')}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className={cx('payment-card-last')}>
-                                        <div className={cx('payment-card-input-div', 'cvv')}>
-                                            <input
-                                                onChange={handleChange}
-                                                name="cvv"
-                                                value={values?.cvv}
-                                                placeholder="CVV"
-                                                className={cx('payment-card-input')}
-                                            />
-                                        </div>
-                                        <p className={cx('payment-card-last-para')}>
-                                            3 or 4 digits usually found on the signature strip
-                                        </p>
-                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <div className={cx('process-div')}>
+                            <p className={cx('process-title')}>Process (Estimate: 3- 6 days)</p>
+                            <div className={cx('process-bar')}>
+                                {orderProcess === 'not verified' && (
+                                    <>
+                                        <div className={cx('process-bar-1st-child', 'active')}>
+                                            <div className={cx('process-bar-icon-div')}>
+                                                <FontAwesomeIcon className={cx('process-icon-check')} icon={faCheck} />
+                                            </div>
+                                        </div>
+                                        <div className={cx('process-bar-2nd-child')}>
+                                            <div className={cx('process-bar-icon-div')}>
+                                                <FontAwesomeIcon className={cx('process-icon')} icon={faSpinner} />
+                                            </div>
+                                        </div>
+                                        <div className={cx('process-bar-3rd-child')}>
+                                            <div className={cx('process-bar-icon-div')}>
+                                                <FontAwesomeIcon className={cx('process-icon')} icon={faSpinner} />
+                                            </div>
+                                        </div>
+                                        <div className={cx('process-bar-4th-child')}>
+                                            <div className={cx('process-bar-icon-div')}>
+                                                <FontAwesomeIcon className={cx('process-icon')} icon={faSpinner} />
+                                            </div>
+                                        </div>
+                                        <div className={cx('process-bar-5th-child')}>
+                                            <div className={cx('process-bar-icon-div')}>
+                                                <FontAwesomeIcon className={cx('process-icon')} icon={faSpinner} />
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
+                                {orderProcess === 'order processed' && (
+                                    <>
+                                        <div className={cx('process-bar-1st-child', 'active')}>
+                                            <div className={cx('process-bar-icon-div')}>
+                                                <FontAwesomeIcon className={cx('process-icon-check')} icon={faCheck} />
+                                            </div>
+                                        </div>
+                                        <div className={cx('process-bar-2nd-child', 'active')}>
+                                            <div className={cx('process-bar-icon-div')}>
+                                                <FontAwesomeIcon className={cx('process-icon-check')} icon={faCheck} />
+                                            </div>
+                                        </div>
+                                        <div className={cx('process-bar-3rd-child')}>
+                                            <div className={cx('process-bar-icon-div')}>
+                                                <FontAwesomeIcon className={cx('process-icon')} icon={faSpinner} />
+                                            </div>
+                                        </div>
+                                        <div className={cx('process-bar-4th-child')}>
+                                            <div className={cx('process-bar-icon-div')}>
+                                                <FontAwesomeIcon className={cx('process-icon')} icon={faSpinner} />
+                                            </div>
+                                        </div>
+                                        <div className={cx('process-bar-5th-child')}>
+                                            <div className={cx('process-bar-icon-div')}>
+                                                <FontAwesomeIcon className={cx('process-icon')} icon={faSpinner} />
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
+                                {orderProcess === 'order shipped' && (
+                                    <>
+                                        <div className={cx('process-bar-1st-child', 'active')}>
+                                            <div className={cx('process-bar-icon-div')}>
+                                                <FontAwesomeIcon className={cx('process-icon-check')} icon={faCheck} />
+                                            </div>
+                                        </div>
+                                        <div className={cx('process-bar-2nd-child', 'active')}>
+                                            <div className={cx('process-bar-icon-div')}>
+                                                <FontAwesomeIcon className={cx('process-icon-check')} icon={faCheck} />
+                                            </div>
+                                        </div>
+                                        <div className={cx('process-bar-3rd-child', 'active')}>
+                                            <div className={cx('process-bar-icon-div')}>
+                                                <FontAwesomeIcon className={cx('process-icon-check')} icon={faCheck} />
+                                            </div>
+                                        </div>
+                                        <div className={cx('process-bar-4th-child')}>
+                                            <div className={cx('process-bar-icon-div')}>
+                                                <FontAwesomeIcon className={cx('process-icon')} icon={faSpinner} />
+                                            </div>
+                                        </div>
+                                        <div className={cx('process-bar-5th-child')}>
+                                            <div className={cx('process-bar-icon-div')}>
+                                                <FontAwesomeIcon className={cx('process-icon')} icon={faSpinner} />
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
+                                {orderProcess === 'order is shipping' && (
+                                    <>
+                                        <div className={cx('process-bar-1st-child', 'active')}>
+                                            <div className={cx('process-bar-icon-div')}>
+                                                <FontAwesomeIcon className={cx('process-icon-check')} icon={faCheck} />
+                                            </div>
+                                        </div>
+                                        <div className={cx('process-bar-2nd-child', 'active')}>
+                                            <div className={cx('process-bar-icon-div')}>
+                                                <FontAwesomeIcon className={cx('process-icon-check')} icon={faCheck} />
+                                            </div>
+                                        </div>
+                                        <div className={cx('process-bar-3rd-child', 'active')}>
+                                            <div className={cx('process-bar-icon-div')}>
+                                                <FontAwesomeIcon className={cx('process-icon-check')} icon={faCheck} />
+                                            </div>
+                                        </div>
+                                        <div className={cx('process-bar-4th-child', 'active')}>
+                                            <div className={cx('process-bar-icon-div')}>
+                                                <FontAwesomeIcon className={cx('process-icon-check')} icon={faCheck} />
+                                            </div>
+                                        </div>
+                                        <div className={cx('process-bar-5th-child')}>
+                                            <div className={cx('process-bar-icon-div')}>
+                                                <FontAwesomeIcon className={cx('process-icon')} icon={faSpinner} />
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
+                                {orderProcess === 'order arrived' && (
+                                    <>
+                                        <div className={cx('process-bar-1st-child', 'active')}>
+                                            <div className={cx('process-bar-icon-div')}>
+                                                <FontAwesomeIcon className={cx('process-icon-check')} icon={faCheck} />
+                                            </div>
+                                        </div>
+                                        <div className={cx('process-bar-2nd-child', 'active')}>
+                                            <div className={cx('process-bar-icon-div')}>
+                                                <FontAwesomeIcon className={cx('process-icon-check')} icon={faCheck} />
+                                            </div>
+                                        </div>
+                                        <div className={cx('process-bar-3rd-child', 'active')}>
+                                            <div className={cx('process-bar-icon-div')}>
+                                                <FontAwesomeIcon className={cx('process-icon-check')} icon={faCheck} />
+                                            </div>
+                                        </div>
+                                        <div className={cx('process-bar-4th-child', 'active')}>
+                                            <div className={cx('process-bar-icon-div')}>
+                                                <FontAwesomeIcon className={cx('process-icon-check')} icon={faCheck} />
+                                            </div>
+                                        </div>
+                                        <div className={cx('process-bar-5th-child')}>
+                                            <div className={cx('process-bar-icon-div')}>
+                                                <FontAwesomeIcon className={cx('process-icon-check')} icon={faCheck} />
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+                            <div className={cx('process-para')}>
+                                <p>Order is processing</p>
+                                <p>Order processed</p>
+                                <p>Order shipped</p>
+                                <p>Order en route</p>
+                                <p>Order arrived</p>
+                            </div>
+                        </div>
                         <div className={cx('footer-div')}>
-                            <Link to={'/order-shipping'} className={cx('footer-return')}>
+                            <Link to={'/my-order'} className={cx('footer-return')}>
                                 <FontAwesomeIcon className={cx('footer-icon')} icon={faChevronLeft} />
-                                <p className={cx('footer-para')}>Return to Shipping</p>
-                            </Link>
-                            <Link onClick={handleOrder}>
-                                <button className={cx('btn')}>Complete Order</button>
+                                <p className={cx('footer-para')}>Return back</p>
                             </Link>
                         </div>
                     </div>
                 </div>
                 <div className={cx('right-div', 'col', 'l-5')}>
                     <div className={cx('product-container', 'payment-product-container')}>
-                        {carts?.map((cart, index) => (
+                        {orderDetail?.products?.map((detail, index) => (
                             <div key={index} className={cx('product-div')}>
-                                <img className={cx('product-image')} src={cart.imageUrl} alt="product-image" />
+                                <img className={cx('product-image')} src={detail.imageUrl} alt="product-image" />
                                 <div className={cx('product-info')}>
                                     <div className={cx('name-color')}>
-                                        <p className={cx('name')}>{capitalizeString(cart.name)}</p>
-                                        <p className={cx('color')}>{capitalizeString(cart.color)}</p>
+                                        <p className={cx('name')}>{capitalizeString(detail.name)}</p>
+                                        <p className={cx('color')}>{capitalizeString(detail.color)}</p>
                                     </div>
+
                                     <p className={cx('price')}>
-                                        {cart.price.toLocaleString()}
+                                        {detail.price.toLocaleString()}
                                         <span style={{ textDecoration: 'underline' }}>đ</span>
                                     </p>
                                 </div>
@@ -214,7 +317,7 @@ function MyOrderDetail() {
                         <div className={cx('subtotal-price-div')}>
                             <p className={cx('bonus-title')}>Subtotal:</p>
                             <p className={cx('bonus-price')}>
-                                {subTotalPrice?.toLocaleString()}
+                                {calculateSubTotal(orderDetail?.products).toLocaleString()}
                                 <span style={{ textDecoration: 'underline' }}>đ</span>
                             </p>
                         </div>
@@ -229,7 +332,8 @@ function MyOrderDetail() {
                     <div className={cx('total-div')}>
                         <p className={cx('total-title')}>Total:</p>
                         <p className={cx('total-price')}>
-                            {totalPrice?.toLocaleString()}
+                            {calculateTotal(orderDetail.products).toLocaleString()}
+
                             <span style={{ textDecoration: 'underline' }}>đ</span>
                         </p>
                     </div>

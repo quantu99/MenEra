@@ -82,6 +82,7 @@
     right: -66px;
     bottom: -75px;
     border-radius: 5px;
+    line-height: 1.5;
     display: none;
 }
 .something {
@@ -129,6 +130,20 @@
     to {
         transform: rotate(360deg);
     }
+}
+.loading-api-para {
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 250px;
+    font-size: 30px;
+}
+.loading-api-icon {
+    margin-left: 10px;
+    font-size: 45px;
+    color: var(--tan-color);
+    animation: spinner 2s linear infinite;
 }
 // Responsive
 .grid {

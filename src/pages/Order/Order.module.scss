@@ -120,6 +120,13 @@
     color: var(--cream-color);
     outline: none;
 }
+.error-msg {
+    font-size: 14px;
+    font-weight: 400;
+    font-style: italic;
+    padding-top: 8px;
+    color: var(--red-color);
+}
 // footer-div
 .footer-div {
     padding-top: 30px;
@@ -397,7 +404,6 @@
     align-items: center;
     justify-content: space-between;
     position: relative;
-    padding-bottom: 15px;
 }
 .payment-card-input {
     width: 100%;
@@ -417,14 +423,18 @@
 }
 .payment-card-date {
     display: flex;
+    padding-top: 15px;
     padding-bottom: 15px;
 }
 .payment-card-input-div {
     width: 100%;
 }
 .month {
-    width: 100%;
+    width: 50%;
     margin-right: 15px;
+}
+.year {
+    width: 50%;
 }
 .payment-card-last {
     display: flex;

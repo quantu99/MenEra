@@ -6,7 +6,8 @@ import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCart, getInfoDetail, updateOrderInfo, updatePaymentInfo } from '../../redux/apiRequest';
+import { getCart, getInfoDetail, updatePaymentInfo } from '../../redux/apiRequest';
+import validationpayment from './validationpayment';
 const cx = classNames.bind(styles);
 function Payment() {
     const [shipPrice, setShipPrice] = useState(40000);
@@ -18,6 +19,8 @@ function Payment() {
     const subTotalPrice = carts?.reduce((accumulator, cart) => accumulator + cart.price, 0);
     const totalPrice = shipPrice + subTotalPrice;
     const infoDetail = useSelector((state) => state.auth.getInfoDetail?.infoDetail);
+    const [errors, setErrors] = useState({});
+    const [valid, setValid] = useState(false);
     useEffect(() => {
         getInfoDetail(id, dispatch);
     }, []);
@@ -34,25 +37,48 @@ function Payment() {
     }
     // set validate
     const [values, setValues] = useState({
-        cardNumber: infoDetail?.cardNumber,
-        cardMonth: infoDetail?.cardMonth,
-        cardYear: infoDetail?.cardYear,
-        cvv: infoDetail?.cvv,
+        cardNumber: infoDetail && infoDetail.cardNumber ? infoDetail.cardNumber : '',
+        cardMonth: infoDetail && infoDetail.cardMonth ? infoDetail.cardMonth : '',
+        cardYear: infoDetail && infoDetail.cardYear ? infoDetail.cardYear : '',
+        cvv: infoDetail && infoDetail.cvv ? infoDetail.cvv : '',
     });
+    console.log(values.cardNumber.toString().length);
     const handleChange = (e) => {
         setValues({
             ...values,
             [e.target.name]: e.target.value,
         });
+        setErrors({});
     };
-    const handleOrder = () => {
+    useEffect(() => {
+        const isValid =
+            values.cardNumber !== '' &&
+            values.cardNumber.toString().length === 16 &&
+            /^\d+$/.test(values.cardNumber) &&
+            values.cardMonth !== '' &&
+            parseInt(values.cardMonth) >= 1 &&
+            parseInt(values.cardMonth) <= 12 &&
+            /^\d+$/.test(values.cardMonth) &&
+            values.cardYear !== '' &&
+            parseInt(values.cardYear) >= 2023 &&
+            /^\d+$/.test(values.cardYear) &&
+            values.cvv !== '' &&
+            values.cvv.toString().length === 3 &&
+            /^\d+$/.test(values.cvv);
+        setValid(isValid);
+    }, [values]);
+    console.log(valid);
+    const handleOrder = async () => {
         const newInfo = {
             cardNumber: values.cardNumber,
             cardMonth: values.cardMonth,
             cardYear: values.cardYear,
             cvv: values.cvv,
         };
-        updatePaymentInfo(id, dispatch, newInfo, navigate);
+        setErrors(validationpayment(values));
+        if (valid) {
+            await updatePaymentInfo(id, dispatch, newInfo, navigate);
+        }
     };
     return (
         <div className={cx('wrapper', 'grid')}>
@@ -144,35 +170,45 @@ function Payment() {
                                             src="https://webservices.global-e.com/content/images/paymentMethods/pm.svg"
                                         />
                                     </div>
+                                    {errors.cardNumber && <p className={cx('error-msg')}>{errors.cardNumber}</p>}
                                     <div className={cx('payment-card-date')}>
-                                        <div className={cx('payment-card-input-div', 'month')}>
-                                            <input
-                                                onChange={handleChange}
-                                                name="cardMonth"
-                                                value={values?.cardMonth}
-                                                placeholder="Month"
-                                                className={cx('payment-card-input')}
-                                            />
+                                        <div className={cx('month')}>
+                                            <div className={cx('payment-card-input-div')}>
+                                                <input
+                                                    onChange={handleChange}
+                                                    name="cardMonth"
+                                                    value={values?.cardMonth}
+                                                    placeholder="Month"
+                                                    className={cx('payment-card-input')}
+                                                />
+                                            </div>
+                                            {errors.cardMonth && <p className={cx('error-msg')}>{errors.cardMonth}</p>}
                                         </div>
-                                        <div className={cx('payment-card-input-div', 'year')}>
-                                            <input
-                                                onChange={handleChange}
-                                                name="cardYear"
-                                                value={values?.cardYear}
-                                                placeholder="Year"
-                                                className={cx('payment-card-input')}
-                                            />
+                                        <div className={cx('year')}>
+                                            <div className={cx('payment-card-input-div')}>
+                                                <input
+                                                    onChange={handleChange}
+                                                    name="cardYear"
+                                                    value={values?.cardYear}
+                                                    placeholder="Year"
+                                                    className={cx('payment-card-input')}
+                                                />
+                                            </div>
+                                            {errors.cardYear && <p className={cx('error-msg')}>{errors.cardYear}</p>}
                                         </div>
                                     </div>
                                     <div className={cx('payment-card-last')}>
-                                        <div className={cx('payment-card-input-div', 'cvv')}>
-                                            <input
-                                                onChange={handleChange}
-                                                name="cvv"
-                                                value={values?.cvv}
-                                                placeholder="CVV"
-                                                className={cx('payment-card-input')}
-                                            />
+                                        <div className={cx('cvv')}>
+                                            <div className={cx('payment-card-input-div')}>
+                                                <input
+                                                    onChange={handleChange}
+                                                    name="cvv"
+                                                    value={values?.cvv}
+                                                    placeholder="CVV"
+                                                    className={cx('payment-card-input')}
+                                                />
+                                            </div>
+                                            {errors.cvv && <p className={cx('error-msg')}>{errors.cvv}</p>}
                                         </div>
                                         <p className={cx('payment-card-last-para')}>
                                             3 or 4 digits usually found on the signature strip

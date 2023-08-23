@@ -225,7 +225,6 @@ export const updatePaymentInfo = async (id, dispatch, newInfo, navigate) => {
         });
         dispatch(updateOrderInfoSuccess(res.data));
         navigate('/order-complete');
-        // navigate('/order-shipping');
     } catch (err) {
         dispatch(updateOrderInfoFailed());
     }
@@ -239,13 +238,14 @@ export const getInfoDetail = async (id, dispatch) => {
         dispatch(getInfoDetailFailed());
     }
 };
-export const addNewOrder = async (userId, dispatch) => {
+export const addNewOrder = async (userId, dispatch, navigate) => {
     dispatch(addNewOrderStart());
     try {
         const res = await axios.post('https://emc-api.onrender.com/v1/order/add', {
             userId: userId,
         });
         dispatch(addNewOrderSuccess(res.data));
+        navigate('/my-order');
     } catch (err) {
         dispatch(addNewOrderFailed());
     }

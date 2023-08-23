@@ -47,7 +47,6 @@ function Register() {
         password: '',
         confirmPassword: '',
     });
-    console.log(values.username);
     useEffect(() => {
         // Kiểm tra tính hợp lệ của các giá trị input
         const isValid =
@@ -71,7 +70,6 @@ function Register() {
 
         setAllErrors(isValid); // Cập nhật giá trị của allErrors
     }, [values]);
-    console.log(allErrors);
     // get all users
     useEffect(() => {
         getAllUsers(dispatch);
