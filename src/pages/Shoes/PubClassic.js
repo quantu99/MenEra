@@ -50,7 +50,7 @@ function PubClassic() {
                     <div className={cx('intro-image-div', 'l-7', 'l-o-1')}>
                         <img
                             className={cx('intro-image')}
-                            src="https://baselondon.com/cdn/shop/collections/Brogues-Banner_1024x1024.jpg?v=1673340875"
+                            src="https://baselondon.com/cdn/shop/collections/Pub-classics-1_1024x1024.jpg?v=1673351048"
                         />
                     </div>
                 </div>

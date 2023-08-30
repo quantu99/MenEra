@@ -55,7 +55,7 @@ function Wedding() {
                     <div className={cx('intro-image-div', 'l-7', 'l-o-1')}>
                         <img
                             className={cx('intro-image')}
-                            src="https://baselondon.com/cdn/shop/collections/Brogues-Banner_1024x1024.jpg?v=1673340875"
+                            src="https://baselondon.com/cdn/shop/collections/Wedding-Shoes-1_1024x1024.jpg?v=1673353285"
                         />
                     </div>
                 </div>

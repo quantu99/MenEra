@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import styles from './Thumpnail.module.scss';
 import classNames from 'classnames/bind';
 const cx = classNames.bind(styles);
@@ -8,7 +9,9 @@ function Thumbnail() {
             <div className={cx('content')}>
                 <h1>CLASSIC-ROMANTIC-TRENDY VIBES</h1>
             </div>
-            <button className={cx('btn')}>Shop now</button>
+            <Link to={'/all-shoes'}>
+                <button className={cx('btn')}>Shop now</button>
+            </Link>
         </div>
     );
 }

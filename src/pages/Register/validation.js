@@ -14,6 +14,8 @@ const validation = (values) => {
         errors.username = 'This field is required';
     } else if (values.username.indexOf(' ') !== -1) {
         errors.username = 'Username must not have the empty space ';
+    } else if (values.username.length < 6) {
+        errors.username = 'Username must have min 6 letters';
     } else if (!specialLetter.test(values.username)) {
         errors.username = 'Username must not have the special letter';
     } else if (values.username.includes("'")) {

@@ -54,6 +54,7 @@ function Register() {
             values.lastname !== '' &&
             values.address !== '' &&
             !values.username.indexOf(' ') !== -1 &&
+            values.username.length >= 6 &&
             values.username !== '' &&
             !values.username.includes("'") &&
             /^[a-zA-Z0-9]+$/.test(values.username) &&

@@ -1,6 +1,7 @@
 import styles from './Footer.module.scss';
 import classNames from 'classnames/bind';
 import logo from '../../../image/logo.png';
+import { Link } from 'react-router-dom';
 const cx = classNames.bind(styles);
 function Footer() {
     return (
@@ -36,17 +37,27 @@ function Footer() {
                         <div className={cx('products')}>
                             <h1 className={cx('right-title')}>Products</h1>
                             <ul className={cx('list')}>
-                                <li className={cx('list-item')}>Men's Shoes</li>
-                                <li className={cx('list-item')}>Men's Boots</li>
-                                <li className={cx('list-item')}>Men's Trainers</li>
-                                <li className={cx('list-item')}>Men's Sandals</li>
+                                <Link to={'/all-shoes'} style={{ textDecoration: 'none' }}>
+                                    <li className={cx('list-item')}>Men's Shoes</li>
+                                </Link>
+                                <Link to={'/all-boots'} style={{ textDecoration: 'none' }}>
+                                    <li className={cx('list-item')}>Men's Boots</li>
+                                </Link>
+                                <Link to={'/loafers'} style={{ textDecoration: 'none' }}>
+                                    <li className={cx('list-item')}>Men's Loafers</li>
+                                </Link>
+                                <Link to={'/chelsea'} style={{ textDecoration: 'none' }}>
+                                    {' '}
+                                    <li className={cx('list-item')}>Men's Chelsea</li>
+                                </Link>
                             </ul>
                         </div>
                         <div className={cx('help')}>
                             <h1 className={cx('right-title')}>Help</h1>
                             <ul className={cx('list')}>
-                                <li className={cx('list-item')}>Help Centre</li>
-                                <li className={cx('list-item')}>Contact Us</li>
+                                <Link to={'/help/contact'} style={{ textDecoration: 'none' }}>
+                                    <li className={cx('list-item')}>Contact Us</li>
+                                </Link>
                                 <li className={cx('list-item')}>Delivery</li>
                                 <li className={cx('list-item')}>Return</li>
                                 <li className={cx('list-item')}>Track My Order</li>

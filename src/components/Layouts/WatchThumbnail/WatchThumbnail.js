@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import styles from './WatchThumbnail.module.scss';
 import classNames from 'classnames/bind';
 const cx = classNames.bind(styles);
@@ -15,7 +16,9 @@ function WatchThumbnail() {
                         <div className={cx('content', 'col', 'l-6', 'l-o-2')}>
                             <h1>BE UNIQUE</h1>
                             <p>Show boldy personality via noble & elegant styles</p>
-                            <button className={cx('btn')}>Shop now</button>
+                            <Link to={'/brogues'}>
+                                <button className={cx('btn')}>Shop now</button>
+                            </Link>
                         </div>
                     </div>
                 </div>

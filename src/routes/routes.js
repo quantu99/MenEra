@@ -1,5 +1,6 @@
 import Account from '../pages/Account/Account';
 import Cart from '../pages/Cart/Cart';
+import Contact from '../pages/HelpCentre/Contact';
 import Home from '../pages/Home/Home';
 import Login from '../pages/Login/Login';
 import MyOrder from '../pages/MyOrder/MyOrder';
@@ -59,5 +60,6 @@ const publicRoutes = [
     { path: '/order-payment', component: Payment },
     { path: 'order-complete', component: OrderDone },
     { path: '/my-account', component: Account },
+    { path: '/help/contact', component: Contact },
 ];
 export { publicRoutes };
