@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import styles from './Kind.module.scss';
 import classNames from 'classnames/bind';
 const cx = classNames.bind(styles);
@@ -15,7 +16,9 @@ function Kind() {
                             <h1>Men's Work Shoes</h1>
                             <p>Leather Formals that Mean Business</p>
                         </div>
-                        <button className={cx('btn')}>Shop now</button>
+                        <Link to={'/work-shoes'}>
+                            <button className={cx('btn')}>Shop now</button>
+                        </Link>
                     </div>
                 </div>
                 <div className={cx('frame', 'col', 'l-6')}>
@@ -28,7 +31,9 @@ function Kind() {
                             <h1>Men's Wedding Shoes</h1>
                             <p>Browse Classic and Contemporary Men's Formals</p>
                         </div>
-                        <button className={cx('btn')}>Shop now</button>
+                        <Link to={'/wedding'}>
+                            <button className={cx('btn')}>Shop now</button>
+                        </Link>
                     </div>
                 </div>
                 <div className={cx('frame', 'col', 'l-6')}>
@@ -41,7 +46,9 @@ function Kind() {
                             <h1>Men's Boots</h1>
                             <p>Explore The Latest Men's Boot Styles</p>
                         </div>
-                        <button className={cx('btn')}>Shop now</button>
+                        <Link to={'/all-boots'}>
+                            <button className={cx('btn')}>Shop now</button>
+                        </Link>
                     </div>
                 </div>
                 <div className={cx('frame', 'col', 'l-6')}>
@@ -54,7 +61,9 @@ function Kind() {
                             <h1>Men's Loafers</h1>
                             <p>Slip into Something a Little More Stylish</p>
                         </div>
-                        <button className={cx('btn')}>Shop now</button>
+                        <Link to={'/loafers'}>
+                            <button className={cx('btn')}>Shop now</button>
+                        </Link>
                     </div>
                 </div>
             </div>

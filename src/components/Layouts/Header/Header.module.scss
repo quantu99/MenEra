@@ -327,6 +327,22 @@
         transform: translateX(0);
     }
 }
+.cart-div {
+    position: relative;
+}
+.cart-number {
+    position: absolute;
+    right: 35%;
+    top: -10px;
+    background-color: var(--cream-color);
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Poppins', sans-serif;
+}
 // Responsive
 .grid {
     width: 100%;

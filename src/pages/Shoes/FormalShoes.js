@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight, faGear } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
-import { getAllProducts } from '../../redux/apiRequest';
+import { getAllProducts, getProductDetail } from '../../redux/apiRequest';
 import { useDispatch, useSelector } from 'react-redux';
 const cx = classNames.bind(styles);
 function FormalShoes() {
@@ -22,6 +22,9 @@ function FormalShoes() {
             return l.toUpperCase();
         });
     }
+    const handleClick = (id) => {
+        getProductDetail(dispatch, id);
+    };
     return (
         <div className={cx('wrapper')}>
             <Header />
@@ -56,6 +59,7 @@ function FormalShoes() {
                         {formal?.map((product) => (
                             <Link
                                 style={{ textDecoration: 'none' }}
+                                onClick={() => handleClick(product._id)}
                                 to={`/${product._id}`}
                                 className={cx('product-div', 'col', 'l-3')}
                             >

@@ -6,7 +6,7 @@ import { faGratipay } from '@fortawesome/free-brands-svg-icons';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { logoutUsers } from '../../../redux/apiRequest';
+import { getCart, getWish, logoutUsers } from '../../../redux/apiRequest';
 import { createAxios } from '../../../createInstance';
 import { logoutSuccess } from '../../../redux/authSlice';
 import Cart from '../../../pages/Cart/Cart';
@@ -31,16 +31,17 @@ function Header() {
         setPosition2('0');
     };
     const noHover2 = () => {
-        setPosition2('-1000%');
+        setPosition2('-100000%');
     };
     //
     const [userExist, setUserExist] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const user = useSelector((state) => state.auth.login?.currentUser);
-    const userCart = user?.cart;
     const userId = user?._id;
     const userAccessToken = user?.accessToken;
+    const carts = useSelector((state) => state.auth.getCart?.cart);
+    const wishlist = useSelector((state) => state.auth.getWish?.wishlist);
     let axiosJWT = createAxios(user, dispatch, logoutSuccess);
     const handleClick = () => {
         logoutUsers(userAccessToken, userId, dispatch, navigate, axiosJWT);
@@ -56,7 +57,16 @@ function Header() {
     const handleOpenCart = () => {
         setOpenCart(!openCart);
     };
-
+    useEffect(() => {
+        if (user) {
+            getCart(userId, dispatch);
+        }
+    }, [carts]);
+    useEffect(() => {
+        if (user) {
+            getWish(userId, dispatch);
+        }
+    }, [wishlist]);
     return (
         <div>
             <div className={cx('wrapper', 'grid')}>
@@ -89,15 +99,22 @@ function Header() {
                         </ul>
                     </div>
                     <div className={cx('auth', 'col', 'l-4')}>
-                        <FontAwesomeIcon className={cx('icon')} icon={faMagnifyingGlassDollar} />
                         <label htmlFor="checkbox">
                             <FontAwesomeIcon className={cx('icon')} icon={faUserTie} />
                         </label>
-                        <Link to={'/my-wishlist'}>
+                        <Link
+                            style={{ textDecoration: 'none', color: 'inherit' }}
+                            className={cx('cart-div')}
+                            to={'/my-wishlist'}
+                        >
                             <FontAwesomeIcon className={cx('icon')} icon={faGratipay} />
+                            {user && wishlist && <div className={cx('cart-number')}>{wishlist?.length}</div>}
                         </Link>
 
-                        <FontAwesomeIcon onClick={handleOpenCart} className={cx('icon')} icon={faSuitcase} />
+                        <div className={cx('cart-div')}>
+                            <FontAwesomeIcon onClick={handleOpenCart} className={cx('icon')} icon={faSuitcase} />
+                            {user && carts && <div className={cx('cart-number')}>{carts?.length}</div>}
+                        </div>
 
                         {openCart && (
                             <>
@@ -167,9 +184,6 @@ function Header() {
                             >
                                 Casual Shoes
                             </Link>
-                            <Link style={{ textDecoration: 'none' }} to={'/sandals'} className={cx('menu-list-item')}>
-                                Sandals
-                            </Link>
                         </ul>
                     </div>
                     <div className={cx('menu-center-item', 'col', 'l-2')}>
@@ -194,21 +208,21 @@ function Header() {
                         </ul>
                     </div>
                     <div className={cx('menu-right-item', 'col', 'l-6', 'l-o-1')}>
-                        <div className={cx('menu-image-1')}>
+                        <Link to={'/all-shoes'} className={cx('menu-image-1')}>
                             <img
                                 className={cx('image-1')}
                                 alt="menu-img"
                                 src="https://baselondon.com/cdn/shop/files/All-Shoes-Navy-1_686x324_crop_center.jpg?v=1673362439"
                             />
                             <h1 className={cx('image-des')}>All Shoes</h1>
-                        </div>
-                        <div className={cx('menu-image-2')}>
+                        </Link>
+                        <Link to={'/work-shoes'} className={cx('menu-image-2')}>
                             <img
                                 alt="menu-img"
                                 src="https://baselondon.com/cdn/shop/files/Work-Shoes-2_686x324_crop_center.jpg?v=1673362208"
                             />
                             <h1 className={cx('image-des')}>Work Shoes</h1>
-                        </div>
+                        </Link>
                     </div>
                 </div>
             </div>
@@ -222,32 +236,46 @@ function Header() {
                 <div className={cx('row', 'menu-container', 'no-gutters')}>
                     <div className={cx('menu-left-item', 'col', 'l-2', 'l-o-1')}>
                         <ul className={cx('menu-list')}>
-                            <li className={cx('menu-list-item')}>All Boots </li>
-                            <li className={cx('menu-list-item')}>Chukka Boots</li>
-                            <li className={cx('menu-list-item')}>Chelsea Boots</li>
+                            <Link style={{ textDecoration: 'none' }} to={'/all-boots'} className={cx('menu-list-item')}>
+                                All Boots{' '}
+                            </Link>
+                            <Link style={{ textDecoration: 'none' }} to={'/chukka'} className={cx('menu-list-item')}>
+                                Chukka Boots
+                            </Link>
+                            <Link style={{ textDecoration: 'none' }} to={'/chelsea'} className={cx('menu-list-item')}>
+                                Chelsea Boots
+                            </Link>
                         </ul>
                     </div>
                     <div className={cx('menu-center-item', 'col', 'l-2')}>
                         <ul className={cx('menu-list')}>
-                            <li className={cx('menu-list-item')}>Smart Boots</li>
-                            <li className={cx('menu-list-item')}>Biker Boots</li>
+                            <Link
+                                style={{ textDecoration: 'none' }}
+                                to={'/smart-boots'}
+                                className={cx('menu-list-item')}
+                            >
+                                Smart Boots
+                            </Link>
+                            <Link style={{ textDecoration: 'none' }} to={'/biker'} className={cx('menu-list-item')}>
+                                Biker Boots
+                            </Link>
                         </ul>
                     </div>
                     <div className={cx('menu-right-item', 'col', 'l-6', 'l-o-1')}>
-                        <div className={cx('menu-image-1')}>
+                        <Link to={'/all-boots'} className={cx('menu-image-1')}>
                             <img
                                 alt="menu-img"
                                 src="https://baselondon.com/cdn/shop/files/All-Boots-2_686x324_crop_center.jpg?v=1673363526"
                             />
                             <h1 className={cx('image-des')}>All Boots</h1>
-                        </div>
-                        <div className={cx('menu-image-2')}>
+                        </Link>
+                        <Link to={'/chelsea'} className={cx('menu-image-2')}>
                             <img
                                 alt="menu-img"
                                 src="https://baselondon.com/cdn/shop/files/Seymour-bannerArtboard-1_1920x804_crop_center_618eb136-b2b6-4f03-b08f-870951d53925_686x324_crop_center.png?v=1669809298"
                             />
                             <h1 className={cx('image-des')}>Chelsea Boots</h1>
-                        </div>
+                        </Link>
                     </div>
                 </div>
             </div>
@@ -259,52 +287,34 @@ function Header() {
                 onMouseOver={handleHover2}
             >
                 <div className={cx('row', 'no-gutters', 'menu-container-collection')}>
-                    <div className={cx('collection-image-div', 'col', 'l-4')}>
-                        <img
-                            className={cx('collection-image')}
-                            src="https://baselondon.com/cdn/shop/files/Summer-nav_686x324_crop_center.jpg?v=1686304559"
-                        />
-                        <h1 className={cx('collection-des')}>Summer Styles</h1>
-                    </div>
-                    <div className={cx('collection-image-div', 'col', 'l-4')}>
-                        <img
-                            className={cx('collection-image')}
-                            src="https://baselondon.com/cdn/shop/files/date-night-2_686x324_crop_center.jpg?v=1673355268"
-                        />
-                        <h1 className={cx('collection-des')}>Sale</h1>
-                    </div>{' '}
-                    <div className={cx('collection-image-div', 'col', 'l-4')}>
+                    <Link to={'/pub'} className={cx('collection-image-div', 'col', 'l-4')}>
                         <img
                             className={cx('collection-image')}
                             src="https://baselondon.com/cdn/shop/files/Pub-classics-2_686x324_crop_center.jpg?v=1673355611"
                         />
                         <h1 className={cx('collection-des')}>Pub Classics</h1>
-                    </div>{' '}
-                    <div className={cx('collection-image-div', 'col', 'l-4')}>
+                    </Link>{' '}
+                    <Link to={'/suede'} className={cx('collection-image-div', 'col', 'l-4')}>
                         <img
                             className={cx('collection-image')}
                             src="https://baselondon.com/cdn/shop/files/Suede-2_686x324_crop_center.jpg?v=1673355787"
                         />
                         <h1 className={cx('collection-des')}>Suede Styles</h1>
-                    </div>{' '}
-                    <div className={cx('collection-image-div', 'col', 'l-4')}>
+                    </Link>{' '}
+                    <Link to={'/all-shoes'} className={cx('collection-image-div', 'col', 'l-4')}>
                         <img
                             className={cx('collection-image')}
                             src="https://baselondon.com/cdn/shop/files/All-footwear-NAV-1_686x324_crop_center.jpg?v=1673427977"
                         />
                         <h1 className={cx('collection-des')}>All Footwear</h1>
-                    </div>{' '}
-                    <div className={cx('collection-image-div', 'col', 'l-4')}>
+                    </Link>{' '}
+                    <Link to={'/wedding'} className={cx('collection-image-div', 'col', 'l-4')}>
                         <img
                             className={cx('collection-image')}
                             src="https://baselondon.com/cdn/shop/files/wedding-2_686x324_crop_center.jpg?v=1673356940"
                         />
                         <h1 className={cx('collection-des')}>Wedding Shoes</h1>
-                    </div>{' '}
-                    <div className={cx('collection-image-div', 'col', 'l-4')}>
-                        <img className={cx('collection-image')} src="" />
-                        <h1 className={cx('collection-des')}></h1>
-                    </div>
+                    </Link>{' '}
                 </div>
             </div>
         </div>

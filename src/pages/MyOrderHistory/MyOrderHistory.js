@@ -1,22 +1,23 @@
 import { useEffect } from 'react';
-import styles from './MyOrder.module.scss';
+import styles from './MyOrderHistory.module.scss';
 import classNames from 'classnames/bind';
-import { getMyOrder, getOrder, getOrderDetail } from '../../redux/apiRequest';
+import { getMyOrderHistory, getOrderHistoryDetail } from '../../redux/apiRequest';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBox, faCheck, faGear, faHouseCircleCheck, faTruckFast } from '@fortawesome/free-solid-svg-icons';
+import { faGear } from '@fortawesome/free-solid-svg-icons';
 import Header from '../../components/Layouts/Header/Header';
 import Footer from '../../components/Layouts/Footer/Footer';
 import { Link, useNavigate } from 'react-router-dom';
 const cx = classNames.bind(styles);
-function MyOrder() {
+function MyOrderHistory() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const user = useSelector((state) => state.auth.login?.currentUser);
     const id = user?._id;
-    const myOrder = useSelector((state) => state.auth.getMyOrder?.myOrder);
+    const myOrderHistory = useSelector((state) => state.auth.getMyOrderHistory?.myOrderHistory);
+    const orderProgress = myOrderHistory?.orderProgress;
     useEffect(() => {
-        getMyOrder(id, dispatch);
+        getMyOrderHistory(id, dispatch);
     }, []);
     const calculateTotal = (products) => {
         let total = 0;
@@ -26,22 +27,22 @@ function MyOrder() {
         return total;
     };
     const handleGetDetail = (id) => {
-        getOrderDetail(id, dispatch, navigate);
+        getOrderHistoryDetail(id, dispatch, navigate);
     };
     return (
         <div className={cx('wrapper', 'grid')}>
             <Header />
             <div className={cx('order-header')}>
-                <h1 className={cx('order-header-order')}>Order</h1>
-                <p className={cx('order-header-para')}>/</p>
-                <Link to={'/my-order-history'} className={cx('order-header-history')}>
-                    Order history
+                <Link to={'/my-order'} className={cx('order-header-order')}>
+                    Order
                 </Link>
+                <p className={cx('order-header-para')}>/</p>
+                <h1 className={cx('order-header-history')}>Order history</h1>
             </div>
             <div className={cx('order-div')}>
-                {myOrder && (
+                {myOrderHistory && (
                     <>
-                        {myOrder?.map((order, index) => (
+                        {myOrderHistory?.map((order, index) => (
                             <div
                                 onClick={() => handleGetDetail(order?._id)}
                                 key={index}
@@ -70,48 +71,14 @@ function MyOrder() {
                                 </div>
                                 <div className={cx('progress-div')}>
                                     <p className={cx('title')}>Order status</p>
-                                    {!order.orderProgress && (
-                                        <>
-                                            <FontAwesomeIcon className={cx('process-icon')} icon={faGear} />
-                                            <p className={cx('process-para')}>Processing...</p>
-                                        </>
-                                    )}
-                                    {order.orderProgress && order.orderProcess === 'order processed' && (
-                                        <>
-                                            <FontAwesomeIcon className={cx('process-icon', 'icon')} icon={faCheck} />
-                                            <p className={cx('process-para')}>Processed</p>
-                                        </>
-                                    )}
-                                    {order.orderProgress && order.orderProcess === 'order shipped' && (
-                                        <>
-                                            <FontAwesomeIcon className={cx('process-icon', 'icon')} icon={faBox} />
-                                            <p className={cx('process-para')}>Order shipped</p>
-                                        </>
-                                    )}
-                                    {order.orderProgress && order.orderProcess === 'order is shipping' && (
-                                        <>
-                                            <FontAwesomeIcon
-                                                className={cx('process-icon', 'icon')}
-                                                icon={faTruckFast}
-                                            />
-                                            <p className={cx('process-para')}>Order is shipping</p>
-                                        </>
-                                    )}
-                                    {order.orderProgress && order.orderProcess === 'order arrived' && (
-                                        <>
-                                            <FontAwesomeIcon
-                                                className={cx('process-icon', 'icon')}
-                                                icon={faHouseCircleCheck}
-                                            />
-                                            <p className={cx('process-para')}>Order arrived</p>
-                                        </>
-                                    )}
+                                    {!orderProgress && <FontAwesomeIcon className={cx('process-icon')} icon={faGear} />}
+                                    <p className={cx('process-para')}>Processing...</p>
                                 </div>
                             </div>
                         ))}
                     </>
                 )}
-                {!myOrder && (
+                {!myOrderHistory && (
                     <p className={cx('loading-api-para')}>
                         Please wait for moment. Sorry for the inconvenience.
                         <FontAwesomeIcon className={cx('loading-api-icon')} icon={faGear} />
@@ -122,5 +89,4 @@ function MyOrder() {
         </div>
     );
 }
-
-export default MyOrder;
+export default MyOrderHistory;

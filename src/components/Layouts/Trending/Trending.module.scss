@@ -97,6 +97,31 @@
         opacity: 1;
     }
 }
+.no-products-div {
+    display: flex;
+    margin: 0 auto;
+    padding: 40px 0px;
+    align-items: center;
+}
+.no-products-para {
+    font-family: 'Poppins', sans-serif;
+    font-size: 23px;
+    color: var(--charcoal-color);
+}
+.no-products-icon {
+    margin-left: 8px;
+    color: var(--tan-color);
+    font-size: 25px;
+    animation: loading 2s linear infinite;
+}
+@keyframes loading {
+    from {
+        transform: rotate(0);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
 // Responsive
 .grid {
     width: 100%;

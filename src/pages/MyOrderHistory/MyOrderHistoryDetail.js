@@ -1,4 +1,4 @@
-import styles from './MyOrderDetail.module.scss';
+import styles from './MyOrderHistoryDetail.module.scss';
 import classNames from 'classnames/bind';
 import logo from '../../image/logo.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -6,23 +6,23 @@ import { faCheck, faChevronRight, faSpinner, faChevronLeft } from '@fortawesome/
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCart, getOrderDetail } from '../../redux/apiRequest';
+import { getCart, getOrderDetail, getOrderHistoryDetail } from '../../redux/apiRequest';
 const cx = classNames.bind(styles);
-function MyOrderDetail() {
+function MyOrderHistoryDetail() {
     const [shipPrice, setShipPrice] = useState(40000);
-    const orderId = useParams().id;
+    const orderHistoryId = useParams().id;
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const user = useSelector((state) => state.auth.login?.currentUser);
     const id = user?._id;
-    const orderDetail = useSelector((state) => state.order.getOrderDetail?.orderDetail);
-    const orderProcess = orderDetail?.orderProcess;
-    const email = orderDetail?.user?.email || '';
-    const address = orderDetail?.user?.address;
-    const cardNumber = orderDetail?.user?.cardNumber;
+    const orderHistoryDetail = useSelector((state) => state.orderHistory.getOrderHistoryDetail?.orderHistoryDetail);
+    const orderProcess = orderHistoryDetail?.orderProcess;
+    const email = orderHistoryDetail?.user?.email || '';
+    const address = orderHistoryDetail?.user?.address;
+    const cardNumber = orderHistoryDetail?.user?.cardNumber;
     useEffect(() => {
-        getOrderDetail(orderId, dispatch, navigate);
-    }, []);
+        getOrderHistoryDetail(orderHistoryId, dispatch, navigate);
+    }, [orderProcess]);
     useEffect(() => {
         getCart(id, dispatch);
     }, []);
@@ -62,7 +62,7 @@ function MyOrderDetail() {
                                 style={{ fontSize: '20px', fontWeight: '500', color: 'var(--cream-color)' }}
                                 className={cx('navigate-para')}
                             >
-                                Order #{orderDetail?._id}
+                                Order #{orderHistoryDetail?.order}
                             </p>
                         </div>
                         <div className={cx('contact-div')}>
@@ -290,14 +290,12 @@ function MyOrderDetail() {
                                 <FontAwesomeIcon className={cx('footer-icon')} icon={faChevronLeft} />
                                 <p className={cx('footer-para')}>Return back</p>
                             </Link>
-                            {orderProcess !== 'order arrived' && <button className={cx('btn')}>Delete order</button>}
-                            {orderProcess === 'order arrived' && <button className={cx('btn')}>Remove order</button>}
                         </div>
                     </div>
                 </div>
                 <div className={cx('right-div', 'col', 'l-5')}>
                     <div className={cx('product-container', 'payment-product-container')}>
-                        {orderDetail?.products?.map((detail, index) => (
+                        {orderHistoryDetail?.products?.map((detail, index) => (
                             <div key={index} className={cx('product-div')}>
                                 <img className={cx('product-image')} src={detail.imageUrl} alt="product-image" />
                                 <div className={cx('product-info')}>
@@ -318,7 +316,7 @@ function MyOrderDetail() {
                         <div className={cx('subtotal-price-div')}>
                             <p className={cx('bonus-title')}>Subtotal:</p>
                             <p className={cx('bonus-price')}>
-                                {calculateSubTotal(orderDetail?.products).toLocaleString()}
+                                {calculateSubTotal(orderHistoryDetail?.products).toLocaleString()}
                                 <span style={{ textDecoration: 'underline' }}>đ</span>
                             </p>
                         </div>
@@ -333,7 +331,7 @@ function MyOrderDetail() {
                     <div className={cx('total-div')}>
                         <p className={cx('total-title')}>Total:</p>
                         <p className={cx('total-price')}>
-                            {calculateTotal(orderDetail.products).toLocaleString()}
+                            {calculateTotal(orderHistoryDetail.products).toLocaleString()}
 
                             <span style={{ textDecoration: 'underline' }}>đ</span>
                         </p>
@@ -344,4 +342,4 @@ function MyOrderDetail() {
     );
 }
 
-export default MyOrderDetail;
+export default MyOrderHistoryDetail;

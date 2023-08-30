@@ -9,13 +9,13 @@ import { useEffect } from 'react';
 import { getAllProducts, getProductDetail } from '../../redux/apiRequest';
 import { useDispatch, useSelector } from 'react-redux';
 const cx = classNames.bind(styles);
-function CasualShoes() {
+function AllBoots() {
     const dispatch = useDispatch();
     const allProducts = useSelector((state) => state.products.getAllProducts?.allProducts);
     useEffect(() => {
         getAllProducts(dispatch);
     }, []);
-    const casual = allProducts?.filter((product) => product.type.includes('casual'));
+    const allBoots = allProducts?.filter((product) => product.type.includes('boots'));
     // Uppercase first letter of word
     function capitalizeString(str) {
         return str.replace(/\b\w/g, function (l) {
@@ -36,28 +36,26 @@ function CasualShoes() {
                                 <span className={cx('home')}>Home</span>
                             </Link>{' '}
                             <FontAwesomeIcon className={cx('intro-para-navigate-icon')} icon={faChevronRight} />{' '}
-                            <span className={cx('shoes')}>Casual Shoes</span>
+                            <span className={cx('shoes')}>Boots</span>
                         </p>
-                        <h1 className={cx('intro-para-title')}>Casual Shoes</h1>
+                        <h1 className={cx('intro-para-title')}>Boots</h1>
                         <p className={cx('intro-para-content')}>
-                            Looking for hip casual men's shoes? Men's Era has a huge selection of men's casual shoes
-                            that are stylish yet trendy, structured yet tailored and will be your wing-man wherever you
-                            go. Simply look below to explore our casual collection that features bold, bright designs as
-                            well as subtle, hipster styles. There really is something for everyone in this variety of
-                            men's shoes. If you love these, check out the rest of Men's Era's men's shoes, for more
-                            super cool styles.
+                            Our men's boots can give your outfit the kick that it needs to transform you from just an
+                            average Joe, to a dapper gent. Our collection of boots are perfect for those autumnal
+                            Instagrams and wintery Pinterest boards. There are all kinds of men's boots on offer from
+                            suede slip-ons to luxury lace-ups. Browse the range below for some inspiration.
                         </p>
                     </div>
                     <div className={cx('intro-image-div', 'l-7', 'l-o-1')}>
                         <img
                             className={cx('intro-image')}
-                            src="https://baselondon.com/cdn/shop/collections/casual-Banner_1024x1024.jpg?v=1673342187"
+                            src="https://baselondon.com/cdn/shop/collections/Screenshot_from_2022-12-06_17-25-02_1024x1024.png?v=1673354613"
                         />
                     </div>
                 </div>
                 {allProducts && (
                     <div className={cx('body', 'row', 'no-gutters')}>
-                        {casual?.map((product) => (
+                        {allBoots?.map((product) => (
                             <Link
                                 style={{ textDecoration: 'none' }}
                                 onClick={() => handleClick(product._id)}
@@ -87,4 +85,4 @@ function CasualShoes() {
     );
 }
 
-export default CasualShoes;
+export default AllBoots;

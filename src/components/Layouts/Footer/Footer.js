@@ -14,19 +14,19 @@ function Footer() {
                     <div className={cx('about-paragraph')}>
                         <h1>About Us</h1>
                         <p>
-                            Established in 1995 to tend to the footwear demands of the British male, Base London
+                            Established in 2023 to tend to the footwear demands of the British male, Men's Era
                             introduced a somewhat previously unfound, branded footwear option to the high street for the
                             very first time. Before this, guys were faced with only high end designer or own label
-                            products. With an overwhelming passion for delivering incredible footwear, Base London
-                            quickly found themselves emerging as market leaders in their field; something which has been
-                            proudly maintained through to the current day. Designing, developing and delivering a
-                            versatile, appealing but most of all quality range of men's shoes and boots, Base London
-                            strives to satisfy even the fussiest footwear tastes. The finest quality leathers combined
-                            with an excellence in craftsmanship is always used to build a perfectly formed range of
-                            fashion focused formals, versatile semi-formals and comfortable casual styles, season after
-                            season. Supplying more than just a pair of shoes, Base London also goes about providing a
-                            platform upon which the wearer gains confidence, a style and a strong personality that
-                            matches the ethos of the brand.
+                            products. With an overwhelming passion for delivering incredible footwear, Men's Era quickly
+                            found themselves emerging as market leaders in their field; something which has been proudly
+                            maintained through to the current day. Designing, developing and delivering a versatile,
+                            appealing but most of all quality range of men's shoes and boots, Men's Era strives to
+                            satisfy even the fussiest footwear tastes. The finest quality leathers combined with an
+                            excellence in craftsmanship is always used to build a perfectly formed range of fashion
+                            focused formals, versatile semi-formals and comfortable casual styles, season after season.
+                            Supplying more than just a pair of shoes, Men's Era also goes about providing a platform
+                            upon which the wearer gains confidence, a style and a strong personality that matches the
+                            ethos of the brand.
                         </p>
                         <div className={cx('sticky-2')}></div>
                     </div>

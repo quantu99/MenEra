@@ -47,6 +47,11 @@ const authSlice = createSlice({
             myOrder: null,
             error: false,
         },
+        getMyOrderHistory: {
+            isFetching: false,
+            myOrderHistory: null,
+            error: false,
+        },
     },
     reducers: {
         loginStart: (state) => {
@@ -148,6 +153,17 @@ const authSlice = createSlice({
             state.getMyOrder.isFetching = false;
             state.getMyOrder.error = true;
         },
+        getMyOrderHistoryStart: (state) => {
+            state.getMyOrderHistory.isFetching = true;
+        },
+        getMyOrderHistorySuccess: (state, action) => {
+            state.getMyOrderHistory.isFetching = false;
+            state.getMyOrderHistory.myOrderHistory = action.payload;
+        },
+        getMyOrderHistoryFailed: (state) => {
+            state.getMyOrderHistory.isFetching = false;
+            state.getMyOrderHistory.error = true;
+        },
     },
 });
 export const {
@@ -178,5 +194,8 @@ export const {
     getMyOrderStart,
     getMyOrderSuccess,
     getMyOrderFailed,
+    getMyOrderHistoryStart,
+    getMyOrderHistorySuccess,
+    getMyOrderHistoryFailed,
 } = authSlice.actions;
 export default authSlice.reducer;

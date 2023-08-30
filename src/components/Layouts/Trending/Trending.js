@@ -1,8 +1,11 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from './Trending.module.scss';
 import classNames from 'classnames/bind';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllProducts, getProductDetail } from '../../../redux/apiRequest';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircle } from '@fortawesome/free-solid-svg-icons';
+import { faGear, faGears } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 const cx = classNames.bind(styles);
 function Trending() {
     const products = [
@@ -80,6 +83,15 @@ function Trending() {
             brand: 'Bordo',
         },
     ];
+    const dispatch = useDispatch();
+    const allProducts = useSelector((state) => state.products.getAllProducts?.allProducts);
+    const trending = allProducts?.filter(
+        (product) =>
+            product.type.includes('suede') || product.type.includes('chelsea') || product.type.includes('brogues'),
+    );
+    useEffect(() => {
+        getAllProducts(dispatch);
+    }, []);
     const [currentPosition, setCurrentPosition] = useState(0);
     const containerRef = useRef(null);
     const scrollToNextProducts = () => {
@@ -107,21 +119,43 @@ function Trending() {
             });
         }
     };
-
+    function capitalizeString(str) {
+        return str.replace(/\b\w/g, function (l) {
+            return l.toUpperCase();
+        });
+    }
+    const handleClick = (id) => {
+        getProductDetail(dispatch, id);
+    };
     return (
         <div className={cx('wrapper', 'grid')}>
             <h1 className={cx('title')}>Trending now</h1>
             <div ref={containerRef} className={cx('container', 'row', 'no-gutters')}>
-                {products.map((product, index) => (
-                    <div className={cx('item', 'col', 'l-3')}>
-                        <img className={cx('image-feature')} src={product.imageUrl} alt="pic" />
-                        <img className={cx('image-second')} src={product.imageUrl2nd} alt="pic" />
-                        <div className={cx('content')}>
-                            <h1>{product.name}</h1>
-                            <h2>{product.color}</h2>
-                        </div>
+                {allProducts && (
+                    <>
+                        {trending?.map((product, index) => (
+                            <Link
+                                style={{ textDecoration: 'none' }}
+                                onClick={() => handleClick(product._id)}
+                                to={`/${product._id}`}
+                                className={cx('item', 'col', 'l-3')}
+                            >
+                                <img className={cx('image-feature')} src={product.imageUrl} alt="pic" />
+                                <img className={cx('image-second')} src={product.imageUrl2} alt="pic" />
+                                <div className={cx('content')}>
+                                    <h1>{capitalizeString(product.name)}</h1>
+                                    <h2>{capitalizeString(product.color)}</h2>
+                                </div>
+                            </Link>
+                        ))}
+                    </>
+                )}
+                {!allProducts && (
+                    <div className={cx('no-products-div')}>
+                        <p className={cx('no-products-para')}>Please wait a moment, sorry for the inconvenience.</p>
+                        <FontAwesomeIcon className={cx('no-products-icon')} icon={faGear} />
                     </div>
-                ))}
+                )}
             </div>
             <div className={cx('btn-div')}>
                 <button onClick={scrollToPrevProducts} className={cx('btn')}>

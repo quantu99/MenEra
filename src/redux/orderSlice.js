@@ -12,6 +12,11 @@ const orderSlice = createSlice({
             orderDetail: false,
             error: false,
         },
+        pushToHistory: {
+            isFetching: false,
+            success: false,
+            error: false,
+        },
     },
     reducers: {
         addNewOrderStart: (state) => {
@@ -36,6 +41,17 @@ const orderSlice = createSlice({
             state.getOrderDetail.isFetching = false;
             state.getOrderDetail.error = true;
         },
+        pushToHistoryStart: (state) => {
+            state.pushToHistory.isFetching = true;
+        },
+        pushToHistorySuccess: (state) => {
+            state.pushToHistory.isFetching = false;
+            state.pushToHistory.success = true;
+        },
+        pushToHistoryFailed: (state) => {
+            state.pushToHistory.isFetching = false;
+            state.pushToHistory.error = true;
+        },
     },
 });
 export const {
@@ -45,5 +61,8 @@ export const {
     getOrderDetailStart,
     getOrderDetailFailed,
     getOrderDetailSuccess,
+    pushToHistoryStart,
+    pushToHistorySuccess,
+    pushToHistoryFailed,
 } = orderSlice.actions;
 export default orderSlice.reducer;

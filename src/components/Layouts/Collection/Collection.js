@@ -1,83 +1,21 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from './Collection.module.scss';
 import classNames from 'classnames/bind';
+import { getAllProducts, getProductDetail } from '../../../redux/apiRequest';
+import { useDispatch, useSelector } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGear } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 const cx = classNames.bind(styles);
 function Collection() {
-    const products = [
-        {
-            imageUrl2nd: 'https://baselondon.com/cdn/shop/products/image_2_sikes_washed_tan_2_2_320x.jpg?v=1679151662',
-            imageUrl: 'https://baselondon.com/cdn/shop/products/image_1_sikes_washed_tan_1_2_320x.jpg?v=1679151662',
-            name: 'Sikes Washed Chelsea Boots',
-            brand: 'Bordo',
-            color: 'Tan',
-        },
-        {
-            imageUrl:
-                'https://baselondon.com/cdn/shop/products/image_1_woburn_hi_shine_black_2022_pi06012_1_320x.jpg?v=1680784343',
-            imageUrl2nd:
-                'https://baselondon.com/cdn/shop/products/Woburn_20Black_20BASE-FOOTBALL-STILLS-140_320x.jpg?v=1680784343',
-
-            name: 'Woburn Hi Shrine Brogue Shoes',
-            brand: 'Bordo',
-            color: 'Black',
-        },
-        {
-            imageUrl:
-                'https://baselondon.com/cdn/shop/products/DARCY_20BURNISHED_20TAN_20WV03241_201_320x.jpg?v=1683293690',
-            imageUrl2nd:
-                'https://baselondon.com/cdn/shop/products/Darcy_20Burnished_20Tan_20Lifestyle_202_320x.jpg?v=1683293690',
-            name: 'Darcy Burnished Brogue',
-            color: 'Tan',
-        },
-        {
-            imageUrl:
-                'https://baselondon.com/cdn/shop/products/CRANE_20BURNISHED_20GREY_20WV02701_201_320x.jpg?v=1679149966',
-            imageUrl2nd:
-                'https://baselondon.com/cdn/shop/products/CRANE_20BURNISHED_20GREY_20WV02701_206_320x.jpg?v=1679149966',
-            name: 'Crane Burnished Oxford Shoes',
-            color: 'Bordo',
-        },
-        {
-            imageUrl: 'https://baselondon.com/cdn/shop/products/Darcy_20Bordo_204_320x.jpg?v=1680261268',
-            name: 'Darcy Burnished Brogue5',
-            brand: 'Bordo',
-        },
-        {
-            imageUrl: 'https://baselondon.com/cdn/shop/products/Darcy_20Bordo_204_320x.jpg?v=1680261268',
-            name: 'Darcy Burnished Brogue6',
-            brand: 'Bordo',
-        },
-        {
-            imageUrl: 'https://baselondon.com/cdn/shop/products/Darcy_20Bordo_204_320x.jpg?v=1680261268',
-            name: 'Darcy Burnished Brogue7',
-            brand: 'Bordo',
-        },
-        {
-            imageUrl: 'https://baselondon.com/cdn/shop/products/Darcy_20Bordo_204_320x.jpg?v=1680261268',
-            name: 'Darcy Burnished Brogue8',
-            brand: 'Bordo',
-        },
-        {
-            imageUrl: 'https://baselondon.com/cdn/shop/products/Darcy_20Bordo_204_320x.jpg?v=1680261268',
-            name: 'Darcy Burnished Brogue9',
-            brand: 'Bordo',
-        },
-        {
-            imageUrl: 'https://baselondon.com/cdn/shop/products/Darcy_20Bordo_204_320x.jpg?v=1680261268',
-            name: 'Darcy Burnished Brogue10',
-            brand: 'Bordo',
-        },
-        {
-            imageUrl: 'https://baselondon.com/cdn/shop/products/Darcy_20Bordo_204_320x.jpg?v=1680261268',
-            name: 'Darcy Burnished Brogue11',
-            brand: 'Bordo',
-        },
-        {
-            imageUrl: 'https://baselondon.com/cdn/shop/products/Darcy_20Bordo_204_320x.jpg?v=1680261268',
-            name: 'Darcy Burnished Brogue12',
-            brand: 'Bordo',
-        },
-    ];
+    const dispatch = useDispatch();
+    const allProducts = useSelector((state) => state.products.getAllProducts?.allProducts);
+    const formal = allProducts?.filter(
+        (product) => product.type.includes('formal') || product.type.includes('chelsea'),
+    );
+    useEffect(() => {
+        getAllProducts(dispatch);
+    }, []);
     const [currentPosition, setCurrentPosition] = useState(0);
     const containerRef = useRef(null);
     const scrollToNextProducts = () => {
@@ -105,22 +43,44 @@ function Collection() {
             });
         }
     };
-
+    function capitalizeString(str) {
+        return str.replace(/\b\w/g, function (l) {
+            return l.toUpperCase();
+        });
+    }
+    const handleClick = (id) => {
+        getProductDetail(dispatch, id);
+    };
     return (
         <div className={cx('wrapper', 'grid')}>
             <h1 className={cx('title')}>Formal Shoes</h1>
-            <div ref={containerRef} className={cx('container', 'row', 'no-gutters')}>
-                {products.map((product, index) => (
-                    <div className={cx('item', 'col', 'l-3')}>
-                        <img className={cx('image-feature')} src={product.imageUrl} alt="pic" />
-                        <img className={cx('image-second')} src={product.imageUrl2nd} alt="pic" />
-                        <div className={cx('content')}>
-                            <h1>{product.name}</h1>
-                            <h2>{product.color}</h2>
-                        </div>
+            {allProducts && (
+                <>
+                    <div ref={containerRef} className={cx('container', 'row', 'no-gutters')}>
+                        {formal?.map((product, index) => (
+                            <Link
+                                style={{ textDecoration: 'none' }}
+                                onClick={() => handleClick(product._id)}
+                                to={`/${product._id}`}
+                                className={cx('item', 'col', 'l-3')}
+                            >
+                                <img className={cx('image-feature')} src={product.imageUrl} alt="pic" />
+                                <img className={cx('image-second')} src={product.imageUrl2} alt="pic" />
+                                <div className={cx('content')}>
+                                    <h1>{capitalizeString(product.name)}</h1>
+                                    <h2>{capitalizeString(product.color)}</h2>
+                                </div>
+                            </Link>
+                        ))}
                     </div>
-                ))}
-            </div>
+                </>
+            )}
+            {!allProducts && (
+                <div className={cx('no-products-div')}>
+                    <p className={cx('no-products-para')}>Please wait a moment, sorry for the inconvenience.</p>
+                    <FontAwesomeIcon className={cx('no-products-icon')} icon={faGear} />
+                </div>
+            )}
             <div className={cx('btn-div')}>
                 <button onClick={scrollToPrevProducts} className={cx('btn')}>
                     Prev

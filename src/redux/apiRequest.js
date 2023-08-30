@@ -27,6 +27,9 @@ import {
     getMyOrderFailed,
     getMyOrderStart,
     getMyOrderSuccess,
+    getMyOrderHistoryStart,
+    getMyOrderHistoryFailed,
+    getMyOrderHistorySuccess,
 } from './authSlice';
 import { getAllUsersFailed, getAllUsersStart, getAllUsersSuccess } from './userSlice';
 import {
@@ -56,7 +59,15 @@ import {
     getOrderDetailFailed,
     getOrderDetailStart,
     getOrderDetailSuccess,
+    pushToHistoryFailed,
+    pushToHistoryStart,
+    pushToHistorySuccess,
 } from './orderSlice';
+import {
+    getOrderHistoryDetailFailed,
+    getOrderHistoryDetailStart,
+    getOrderHistoryDetailSuccess,
+} from './orderHistorySlice';
 export const loginUser = async (user, dispatch, navigate) => {
     dispatch(loginStart());
     try {
@@ -259,6 +270,15 @@ export const getMyOrder = async (id, dispatch) => {
         dispatch(getMyOrderFailed());
     }
 };
+export const getMyOrderHistory = async (id, dispatch) => {
+    dispatch(getMyOrderHistoryStart());
+    try {
+        const res = await axios.get('https://emc-api.onrender.com/v1/auth/order-history/' + id);
+        dispatch(getMyOrderHistorySuccess(res.data));
+    } catch (err) {
+        dispatch(getMyOrderHistoryFailed());
+    }
+};
 export const getOrderDetail = async (id, dispatch, navigate) => {
     dispatch(getOrderDetailStart());
     try {
@@ -267,5 +287,24 @@ export const getOrderDetail = async (id, dispatch, navigate) => {
         navigate(`/my-order-detail/${id}`);
     } catch (err) {
         dispatch(getOrderDetailFailed());
+    }
+};
+export const getOrderHistoryDetail = async (id, dispatch, navigate) => {
+    dispatch(getOrderHistoryDetailStart());
+    try {
+        const res = await axios.get('https://emc-api.onrender.com/v1/order-history/' + id);
+        dispatch(getOrderHistoryDetailSuccess(res.data));
+        navigate(`/my-order-history-detail/${id}`);
+    } catch (err) {
+        dispatch(getOrderHistoryDetailFailed());
+    }
+};
+export const pushToHistory = async (id, dispatch, navigate) => {
+    dispatch(pushToHistoryStart());
+    try {
+        const res = await axios.put('https://emc-api.onrender.com/v1/order/order-to-history/' + id);
+        dispatch(pushToHistorySuccess(res.data));
+    } catch (err) {
+        dispatch(pushToHistoryFailed());
     }
 };

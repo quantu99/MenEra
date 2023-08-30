@@ -8,7 +8,13 @@
 }
 .order-header-order {
     font-size: 28px;
-    color: var(--gold-color);
+    color: var(--charcoal-color);
+    text-decoration: none;
+    font-weight: 600;
+    &:hover {
+        transition: all 0.2s ease-out;
+        color: var(--gold-color);
+    }
 }
 .order-header-para {
     font-size: 28px;
@@ -17,13 +23,7 @@
 }
 .order-header-history {
     font-size: 28px;
-    color: var(--charcoal-color);
-    text-decoration: none;
-    font-weight: 600;
-    &:hover {
-        transition: all 0.2s ease-out;
-        color: var(--gold-color);
-    }
+    color: var(--gold-color);
 }
 .order-div {
     border-radius: 5px;
@@ -124,9 +124,6 @@
     font-size: 25px;
     color: var(--charcoal-color);
     animation: spinner 2s linear infinite;
-}
-.icon {
-    animation: none;
 }
 @keyframes spinner {
     from {

@@ -18,10 +18,10 @@ function Popular() {
                     </div>
                     <p className={cx('des')}>
                         Looking for a shoe that will make an impression? Look no further than the Woburn Brogues from
-                        Base London. These hi shine formal leather brogues are sure to turn heads with their chunky
-                        rubber studded fashion sole and detailed brogue pattern. Not to mention, they're incredibly
-                        comfortable with a cushioned Ortholiteจ inner-sole. So whether you're headed to the office or a
-                        night out on the town, the Woburn Brogues are perfect for any occasion.
+                        Men's Era. These hi shine formal leather brogues are sure to turn heads with their chunky rubber
+                        studded fashion sole and detailed brogue pattern. Not to mention, they're incredibly comfortable
+                        with a cushioned Ortholiteจ inner-sole. So whether you're headed to the office or a night out on
+                        the town, the Woburn Brogues are perfect for any occasion.
                     </p>
                 </div>
             </div>
