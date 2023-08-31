@@ -304,6 +304,7 @@ export const pushToHistory = async (id, dispatch, navigate) => {
     try {
         const res = await axios.put('https://emc-api.onrender.com/v1/order/order-to-history/' + id);
         dispatch(pushToHistorySuccess(res.data));
+        navigate('/my-order');
     } catch (err) {
         dispatch(pushToHistoryFailed());
     }

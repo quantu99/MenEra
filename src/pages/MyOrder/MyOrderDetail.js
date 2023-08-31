@@ -6,7 +6,7 @@ import { faCheck, faChevronRight, faSpinner, faChevronLeft } from '@fortawesome/
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCart, getOrderDetail } from '../../redux/apiRequest';
+import { getCart, getOrderDetail, pushToHistory } from '../../redux/apiRequest';
 const cx = classNames.bind(styles);
 function MyOrderDetail() {
     const [shipPrice, setShipPrice] = useState(40000);
@@ -47,6 +47,9 @@ function MyOrderDetail() {
         const shipPrice = 40000;
         const totalPrice = total + shipPrice;
         return totalPrice;
+    };
+    const removeOrder = (id) => {
+        pushToHistory(id, dispatch, navigate);
     };
     return (
         <div className={cx('wrapper', 'grid')}>
@@ -291,7 +294,11 @@ function MyOrderDetail() {
                                 <p className={cx('footer-para')}>Return back</p>
                             </Link>
                             {orderProcess !== 'order arrived' && <button className={cx('btn')}>Delete order</button>}
-                            {orderProcess === 'order arrived' && <button className={cx('btn')}>Remove order</button>}
+                            {orderProcess === 'order arrived' && (
+                                <button onClick={() => removeOrder(orderDetail?._id)} className={cx('btn')}>
+                                    Remove order
+                                </button>
+                            )}
                         </div>
                     </div>
                 </div>
