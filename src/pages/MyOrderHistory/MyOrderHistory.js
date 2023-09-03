@@ -4,7 +4,7 @@ import classNames from 'classnames/bind';
 import { getMyOrderHistory, getOrderHistoryDetail } from '../../redux/apiRequest';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGear } from '@fortawesome/free-solid-svg-icons';
+import { faBox, faCheck, faGear, faHouseCircleCheck, faTruckFast } from '@fortawesome/free-solid-svg-icons';
 import Header from '../../components/Layouts/Header/Header';
 import Footer from '../../components/Layouts/Footer/Footer';
 import { Link, useNavigate } from 'react-router-dom';
@@ -71,8 +71,42 @@ function MyOrderHistory() {
                                 </div>
                                 <div className={cx('progress-div')}>
                                     <p className={cx('title')}>Order status</p>
-                                    {!orderProgress && <FontAwesomeIcon className={cx('process-icon')} icon={faGear} />}
-                                    <p className={cx('process-para')}>Processing...</p>
+                                    {!order.orderProgress && (
+                                        <>
+                                            <FontAwesomeIcon className={cx('process-icon')} icon={faGear} />
+                                            <p className={cx('process-para')}>Processing...</p>
+                                        </>
+                                    )}
+                                    {order.orderProgress && order.orderProcess === 'order processed' && (
+                                        <>
+                                            <FontAwesomeIcon className={cx('process-icon', 'icon')} icon={faCheck} />
+                                            <p className={cx('process-para')}>Processed</p>
+                                        </>
+                                    )}
+                                    {order.orderProgress && order.orderProcess === 'order shipped' && (
+                                        <>
+                                            <FontAwesomeIcon className={cx('process-icon', 'icon')} icon={faBox} />
+                                            <p className={cx('process-para')}>Order shipped</p>
+                                        </>
+                                    )}
+                                    {order.orderProgress && order.orderProcess === 'order is shipping' && (
+                                        <>
+                                            <FontAwesomeIcon
+                                                className={cx('process-icon', 'icon')}
+                                                icon={faTruckFast}
+                                            />
+                                            <p className={cx('process-para')}>Order is shipping</p>
+                                        </>
+                                    )}
+                                    {order.orderProgress && order.orderProcess === 'order arrived' && (
+                                        <>
+                                            <FontAwesomeIcon
+                                                className={cx('process-icon', 'icon')}
+                                                icon={faHouseCircleCheck}
+                                            />
+                                            <p className={cx('process-para')}>Order arrived</p>
+                                        </>
+                                    )}
                                 </div>
                             </div>
                         ))}

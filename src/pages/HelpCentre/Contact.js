@@ -2,8 +2,26 @@ import classNames from 'classnames/bind';
 import styles from './Contact.module.scss';
 import Header from '../../components/Layouts/Header/Header';
 import Footer from '../../components/Layouts/Footer/Footer';
+import { useState } from 'react';
+import { addNewMessage } from '../../redux/apiRequest';
+import { useDispatch, useSelector } from 'react-redux';
 const cx = classNames.bind(styles);
 function Contact() {
+    const user = useSelector((state) => state.auth.login?.currentUser);
+    const dispatch = useDispatch();
+    const userId = user?._id;
+    const [values, setValues] = useState({
+        message: '',
+    });
+    const handleChange = (e) => {
+        setValues({
+            [e.target.name]: e.target.value,
+        });
+    };
+    const handleAddNewMessage = () => {
+        const newMessage = values.message;
+        addNewMessage(userId, dispatch, newMessage);
+    };
     return (
         <div className={cx('wrapper', 'grid')}>
             <Header />
@@ -13,13 +31,20 @@ function Contact() {
                     <div className={cx('input-wrapper')}>
                         <div className={cx('input-div')}>
                             <label className={cx('input-label')}>Email</label>
-                            <input className={cx('input')} placeholder="Email" />
+                            <input disabled value={user.email} className={cx('input')} placeholder="Email" />
                         </div>
                         <div className={cx('input-div')}>
                             <label className={cx('input-label')}>Message</label>
-                            <textarea className={cx('input', 'textarea')} placeholder="Write your message"></textarea>
+                            <textarea
+                                name="message"
+                                onChange={handleChange}
+                                className={cx('input', 'textarea')}
+                                placeholder="Write your message"
+                            ></textarea>
                         </div>
-                        <button className={cx('btn')}>Send</button>
+                        <button onClick={handleAddNewMessage} className={cx('btn')}>
+                            Send
+                        </button>
                     </div>
                     <p className={cx('contact-para')}>
                         This site is protected by reCAPTCHA Enterprise and the{' '}

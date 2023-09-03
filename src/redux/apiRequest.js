@@ -68,6 +68,7 @@ import {
     getOrderHistoryDetailStart,
     getOrderHistoryDetailSuccess,
 } from './orderHistorySlice';
+import { addNewMessageFailed, addNewMessageStart, addNewMessageSuccess } from './messSlice';
 export const loginUser = async (user, dispatch, navigate) => {
     dispatch(loginStart());
     try {
@@ -307,5 +308,17 @@ export const pushToHistory = async (id, dispatch, navigate) => {
         navigate('/my-order');
     } catch (err) {
         dispatch(pushToHistoryFailed());
+    }
+};
+export const addNewMessage = async (id, dispatch, message) => {
+    dispatch(addNewMessageStart());
+    try {
+        const res = await axios.put('https://emc-api.onrender.com/v1/message/add-new-message', {
+            userId: id,
+            message: message,
+        });
+        dispatch(addNewMessageSuccess(res.data));
+    } catch (err) {
+        dispatch(addNewMessageFailed());
     }
 };
