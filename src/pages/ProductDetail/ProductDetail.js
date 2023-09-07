@@ -6,7 +6,7 @@ import { addToCart, addToWish, deleteFromWish, getAllProducts, getProductDetail 
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircle, faHeart as farHeart } from '@fortawesome/free-regular-svg-icons';
-import { faHeart as fasHeart, faCircle as fasCircle } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as fasHeart, faCircle as fasCircle, faXmark } from '@fortawesome/free-solid-svg-icons';
 import Header from '../../components/Layouts/Header/Header';
 import Footer from '../../components/Layouts/Footer/Footer';
 const cx = classNames.bind(styles);
@@ -21,6 +21,7 @@ function ProductDetail() {
     const productSuggest = allProduct?.filter((product) => product.type.every((type) => productType?.includes(type)));
     const user = useSelector((state) => state.auth.login?.currentUser);
     const userId = user?._id;
+    const addToCartLoading = useSelector((state) => state.products.addToCart?.isFetching);
     useEffect(() => {
         getProductDetail(dispatch, id);
     }, []);
@@ -99,41 +100,160 @@ function ProductDetail() {
                             <p className={cx('description')}>{productDetail?.description}</p>
                         </div>
                         <div className={cx('btn-div')}>
-                            <button onClick={() => handleAddToCart(productDetail?._id)} className={cx('btn')}>
-                                Add to cart
-                            </button>
-                            {!heart && (
-                                <div
-                                    onClick={() => handleAddToWish(productDetail?._id)}
-                                    className={cx('icon-div', 'fa-stack')}
-                                >
-                                    <FontAwesomeIcon className={cx('fa-stack-2x', 'icon-circle')} icon={faCircle} />
-
-                                    <FontAwesomeIcon
-                                        style={{ color: ' #ad2126' }}
-                                        onClick={handleHeart}
-                                        className={cx('fa-stack-1x', 'icon-heart')}
-                                        icon={farHeart}
-                                    />
-                                    <div className={cx('bubbles')}>Add to WishList</div>
-                                </div>
+                            {user && (
+                                <>
+                                    {!addToCartLoading && (
+                                        <button
+                                            onClick={() => handleAddToCart(productDetail?._id)}
+                                            className={cx('btn')}
+                                        >
+                                            Add to cart
+                                        </button>
+                                    )}
+                                    {addToCartLoading && (
+                                        <button
+                                            onClick={() => handleAddToCart(productDetail?._id)}
+                                            className={cx('btn', 'loading-btn')}
+                                        >
+                                            <p>Please wait...</p>
+                                        </button>
+                                    )}
+                                </>
                             )}
-                            {heart && (
-                                <div
-                                    onClick={() => handleRemoveFromWish(productDetail?._id)}
-                                    className={cx('icon-div', 'fa-stack')}
-                                >
-                                    <FontAwesomeIcon className={cx('fa-stack-2x', 'icon-circle')} icon={faCircle} />
-
-                                    <FontAwesomeIcon
-                                        style={{ color: ' #ad2126' }}
-                                        onClick={handleHeart}
-                                        className={cx('fa-stack-1x', 'icon-heart')}
-                                        icon={fasHeart}
+                            {!user && (
+                                <>
+                                    <label htmlFor="checkbox-require-login" className={cx('btn')}>
+                                        {' '}
+                                        Add to cart
+                                    </label>
+                                    <input
+                                        className={cx('checkbox-require-login')}
+                                        id="checkbox-require-login"
+                                        type="checkbox"
                                     />
+                                    <div className={cx('require-login')}>
+                                        <label htmlFor="checkbox-require-login">
+                                            <FontAwesomeIcon className={cx('require-login-icon')} icon={faXmark} />
+                                        </label>
+                                        <p>
+                                            Please{' '}
+                                            <span className={cx('navigate-span')}>
+                                                <Link style={{ color: 'inherit' }} to={'/login'}>
+                                                    login
+                                                </Link>
+                                            </span>{' '}
+                                            to manage your cart
+                                        </p>
+                                        <p className={cx('or')}>or</p>
+                                        <p className={cx('navigate')}>
+                                            If you are the New Customer, you can create your account in{' '}
+                                            <span className={cx('navigate-span')}>
+                                                <Link style={{ color: 'inherit' }} to={'/register'}>
+                                                    here
+                                                </Link>
+                                            </span>
+                                        </p>
+                                    </div>
+                                    <label
+                                        htmlFor="checkbox-require-login"
+                                        className={cx('overlay-require-login')}
+                                    ></label>
+                                </>
+                            )}
 
-                                    <div className={cx('bubbles')}>Add to WishList</div>
-                                </div>
+                            {user && (
+                                <>
+                                    {!heart && (
+                                        <div
+                                            onClick={() => handleAddToWish(productDetail?._id)}
+                                            className={cx('icon-div', 'fa-stack')}
+                                        >
+                                            <FontAwesomeIcon
+                                                className={cx('fa-stack-2x', 'icon-circle')}
+                                                icon={faCircle}
+                                            />
+
+                                            <FontAwesomeIcon
+                                                style={{ color: ' #ad2126' }}
+                                                onClick={handleHeart}
+                                                className={cx('fa-stack-1x', 'icon-heart')}
+                                                icon={farHeart}
+                                            />
+                                            <div className={cx('bubbles')}>Add to WishList</div>
+                                        </div>
+                                    )}
+                                    {heart && (
+                                        <div
+                                            onClick={() => handleRemoveFromWish(productDetail?._id)}
+                                            className={cx('icon-div', 'fa-stack')}
+                                        >
+                                            <FontAwesomeIcon
+                                                className={cx('fa-stack-2x', 'icon-circle')}
+                                                icon={faCircle}
+                                            />
+
+                                            <FontAwesomeIcon
+                                                style={{ color: ' #ad2126' }}
+                                                onClick={handleHeart}
+                                                className={cx('fa-stack-1x', 'icon-heart')}
+                                                icon={fasHeart}
+                                            />
+
+                                            <div className={cx('bubbles')}>Add to WishList</div>
+                                        </div>
+                                    )}
+                                </>
+                            )}
+                            {!user && (
+                                <>
+                                    <div className={cx('icon-div', 'fa-stack')}>
+                                        <label style={{ cursor: 'pointer' }} htmlFor="checkbox-require-wish">
+                                            <FontAwesomeIcon
+                                                className={cx('fa-stack-2x', 'icon-circle')}
+                                                icon={faCircle}
+                                            />
+                                            <FontAwesomeIcon
+                                                style={{ color: ' #ad2126' }}
+                                                onClick={handleHeart}
+                                                className={cx('fa-stack-1x', 'icon-heart')}
+                                                icon={farHeart}
+                                            />
+                                        </label>
+                                        <div className={cx('bubbles')}>Add to WishList</div>
+                                        <input
+                                            className={cx('checkbox-require-wish')}
+                                            id="checkbox-require-wish"
+                                            type="checkbox"
+                                        />
+                                        <div className={cx('require-wish')}>
+                                            <label htmlFor="checkbox-require-wish">
+                                                <FontAwesomeIcon className={cx('require-login-icon')} icon={faXmark} />
+                                            </label>
+                                            <p>
+                                                Please{' '}
+                                                <span className={cx('navigate-span')}>
+                                                    <Link style={{ color: 'inherit' }} to={'/login'}>
+                                                        login
+                                                    </Link>
+                                                </span>{' '}
+                                                to add your favorite
+                                            </p>
+                                            <p className={cx('or')}>or</p>
+                                            <p className={cx('navigate')}>
+                                                If you are the New Customer, you can create your account in{' '}
+                                                <span className={cx('navigate-span')}>
+                                                    <Link style={{ color: 'inherit' }} to={'/register'}>
+                                                        here
+                                                    </Link>
+                                                </span>
+                                            </p>
+                                        </div>
+                                        <label
+                                            htmlFor="checkbox-require-wish"
+                                            className={cx('overlay-require-wish')}
+                                        ></label>
+                                    </div>
+                                </>
                             )}
                         </div>
                     </div>

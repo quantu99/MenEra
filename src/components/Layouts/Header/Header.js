@@ -61,12 +61,12 @@ function Header() {
         if (user) {
             getCart(userId, dispatch);
         }
-    }, [carts]);
+    }, []);
     useEffect(() => {
         if (user) {
             getWish(userId, dispatch);
         }
-    }, [wishlist]);
+    }, []);
     return (
         <div>
             <div className={cx('wrapper', 'grid')}>

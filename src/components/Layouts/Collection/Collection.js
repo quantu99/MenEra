@@ -33,7 +33,7 @@ function Collection() {
     };
     const scrollToPrevProducts = () => {
         const container = containerRef.current;
-        const containerWidth = container.offsetWidth;
+        const containerWidth = container?.offsetWidth;
 
         if (container.scrollLeft > 0 && currentPosition > 0) {
             setCurrentPosition(currentPosition - 1);

@@ -150,6 +150,15 @@
     color: var(--tan-color);
     animation: spinner 2s linear infinite;
 }
+.no-order {
+    text-align: center;
+    p {
+        padding-top: 100px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 28px;
+        color: var(--charcoal-color);
+    }
+}
 // Responsive
 .grid {
     width: 100%;

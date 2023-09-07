@@ -81,9 +81,16 @@ function Cart() {
                                 <span style={{ textDecoration: 'underline' }}>Total</span>:{' '}
                                 {totalPrice?.toLocaleString()}đ
                             </p>
-                            <Link to={'/order-info'}>
-                                <button className={cx('btn')}>Order now</button>
-                            </Link>
+                            {carts.length >= 1 && (
+                                <Link to={'/order-info'}>
+                                    <button className={cx('btn')}>Order now</button>
+                                </Link>
+                            )}
+                            {carts.length === 0 && (
+                                <Link to={'/all-shoes'}>
+                                    <button className={cx('btn')}>Continue shopping</button>
+                                </Link>
+                            )}
                         </div>
                     </div>
                 </div>

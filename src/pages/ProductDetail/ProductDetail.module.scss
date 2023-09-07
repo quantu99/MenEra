@@ -67,6 +67,155 @@
     border: 1px solid rgba(223, 190, 106, 0);
     background-position: 99% 50%;
 }
+.loading-btn {
+    p {
+        animation: wave 2s infinite;
+    }
+}
+@keyframes wave {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+.overlay-require-login {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 98;
+}
+.require-login {
+    display: none;
+    position: fixed;
+    top: 58%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Poppins', sans-serif;
+    font-size: 20px;
+    padding: 150px 150px;
+    background-color: var(--cream-color);
+    z-index: 99;
+    box-shadow: 0px 0px 5px var(--charcoal-color);
+    animation: require-login-appear 0.3s ease-out;
+}
+@keyframes require-login-appear {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+.checkbox-require-login {
+    display: none;
+}
+.checkbox-require-login:checked ~ .require-login {
+    display: block;
+}
+.checkbox-require-login:checked ~ .overlay-require-login {
+    display: block;
+}
+.or {
+    text-align: center;
+    padding: 14px 0px;
+}
+.navigate {
+    line-height: 1.4;
+}
+.navigate-span {
+    color: var(--tan-color);
+    &:hover {
+        opacity: 0.8;
+    }
+}
+.require-login-icon {
+    position: absolute;
+    right: 14px;
+    top: 5px;
+    cursor: pointer;
+    font-size: 24px;
+    color: var(--charcoal-color);
+    &:hover {
+        color: var(--tan-color);
+        transition: all 0.2s ease-out;
+    }
+}
+.overlay-require-wish {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 98;
+}
+.require-wish {
+    display: none;
+    position: fixed;
+    top: 58%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Poppins', sans-serif;
+    font-size: 20px;
+    padding: 150px 150px;
+    background-color: var(--cream-color);
+    z-index: 99;
+    box-shadow: 0px 0px 5px var(--charcoal-color);
+    animation: require-wish-appear 0.3s ease-out;
+}
+@keyframes require-wish-appear {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+.checkbox-require-wish {
+    display: none;
+}
+.checkbox-require-wish:checked ~ .require-wish {
+    display: block;
+}
+.checkbox-require-wish:checked ~ .overlay-require-wish {
+    display: block;
+}
+.or {
+    text-align: center;
+    padding: 14px 0px;
+}
+.navigate {
+    line-height: 1.4;
+}
+.navigate-span {
+    color: var(--tan-color);
+    &:hover {
+        opacity: 0.8;
+    }
+}
+.require-wish-icon {
+    position: absolute;
+    right: 14px;
+    top: 5px;
+    cursor: pointer;
+    font-size: 24px;
+    color: var(--charcoal-color);
+    &:hover {
+        color: var(--tan-color);
+        transition: all 0.2s ease-out;
+    }
+}
 .icon-div {
     position: relative;
     margin-left: 50px;
