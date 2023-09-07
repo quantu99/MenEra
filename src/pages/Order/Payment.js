@@ -19,6 +19,7 @@ function Payment() {
     const subTotalPrice = carts?.reduce((accumulator, cart) => accumulator + cart.price, 0);
     const totalPrice = shipPrice + subTotalPrice;
     const infoDetail = useSelector((state) => state.auth.getInfoDetail?.infoDetail);
+    const updateInfoLoading = useSelector((state) => state.auth.updateOrderInfo?.isFetching);
     const [errors, setErrors] = useState({});
     const [valid, setValid] = useState(false);
     useEffect(() => {
@@ -222,9 +223,16 @@ function Payment() {
                                 <FontAwesomeIcon className={cx('footer-icon')} icon={faChevronLeft} />
                                 <p className={cx('footer-para')}>Return to Shipping</p>
                             </Link>
-                            <Link onClick={handleOrder}>
-                                <button className={cx('btn')}>Complete Order</button>
-                            </Link>
+                            {!updateInfoLoading && (
+                                <Link onClick={handleOrder}>
+                                    <button className={cx('btn')}>Complete Order</button>
+                                </Link>
+                            )}
+                            {updateInfoLoading && (
+                                <button className={cx('btn', 'loading-btn')}>
+                                    <p>Please wait...</p>
+                                </button>
+                            )}
                         </div>
                     </div>
                 </div>

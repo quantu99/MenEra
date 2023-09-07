@@ -18,6 +18,7 @@ function OrderDone() {
     const subTotalPrice = carts?.reduce((accumulator, cart) => accumulator + cart.price, 0);
     const totalPrice = shipPrice + subTotalPrice;
     const infoDetail = useSelector((state) => state.auth.getInfoDetail?.infoDetail);
+    const addNewOrderLoading = useSelector((state) => state.order.addNewOrder?.isFetching);
     useEffect(() => {
         getInfoDetail(id, dispatch);
     }, []);
@@ -183,11 +184,18 @@ function OrderDone() {
                                 <FontAwesomeIcon className={cx('footer-icon')} icon={faChevronLeft} />
                                 <p className={cx('footer-para')}>Return to Payment</p>
                             </Link>
-                            <Link>
-                                <button onClick={handleOrder} className={cx('btn')}>
-                                    Order now
+                            {!addNewOrderLoading && (
+                                <Link>
+                                    <button onClick={handleOrder} className={cx('btn')}>
+                                        Order now
+                                    </button>
+                                </Link>
+                            )}
+                            {addNewOrderLoading && (
+                                <button className={cx('btn', 'loading-btn')}>
+                                    <p>Please wait...</p>
                                 </button>
-                            </Link>
+                            )}
                         </div>
                     </div>
                 </div>

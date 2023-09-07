@@ -22,6 +22,7 @@ function Order() {
     const [emailError, setEmailError] = useState(false);
     const [valid, setValid] = useState(false);
     const [errors, setErrors] = useState({});
+    const updateInfoLoading = useSelector((state) => state.auth.updateOrderInfo?.isFetching);
     useEffect(() => {
         getAllUsers(dispatch);
         // eslint-disable-next-line
@@ -195,11 +196,18 @@ function Order() {
                                     <FontAwesomeIcon className={cx('footer-icon')} icon={faChevronLeft} />
                                     <p className={cx('footer-para')}>Return to Home</p>
                                 </Link>
-                                <Link>
-                                    <button onClick={handleOrder} className={cx('btn')}>
-                                        Continue to shipping
+                                {!updateInfoLoading && (
+                                    <Link>
+                                        <button onClick={handleOrder} className={cx('btn')}>
+                                            Continue to shipping
+                                        </button>
+                                    </Link>
+                                )}
+                                {updateInfoLoading && (
+                                    <button className={cx('btn', 'loading-btn')}>
+                                        <p>Please wait...</p>
                                     </button>
-                                </Link>
+                                )}
                             </div>
                         </div>
                     </div>
