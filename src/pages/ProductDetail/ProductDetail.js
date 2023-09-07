@@ -264,6 +264,7 @@ function ProductDetail() {
                 <div ref={containerRef} className={cx('suggest-container', 'row', 'no-gutters')}>
                     {productSuggest?.map((product, index) => (
                         <Link
+                            style={{ textDecoration: 'none' }}
                             onClick={() => handleClick(product._id)}
                             to={`/${product._id}`}
                             className={cx('item', 'col', 'l-3')}
