@@ -31,7 +31,8 @@ function Contact() {
                     <div className={cx('input-wrapper')}>
                         <div className={cx('input-div')}>
                             <label className={cx('input-label')}>Email</label>
-                            <input disabled value={user.email} className={cx('input')} placeholder="Email" />
+                            {user && <input disabled value={user?.email} className={cx('input')} placeholder="Email" />}
+                            {!user && <input className={cx('input')} placeholder="Email" />}
                         </div>
                         <div className={cx('input-div')}>
                             <label className={cx('input-label')}>Message</label>
