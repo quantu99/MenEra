@@ -1,16 +1,15 @@
 import classNames from 'classnames/bind';
 import styles from './Popular.module.scss';
+import image from '../../../image/p1.webp';
+import image2 from '../../../image/p2.webp';
+import image3 from '../../../image/p3.webp';
 const cx = classNames.bind(styles);
 function Popular() {
     return (
         <div className={cx('wrapper', 'grid')}>
             <div className={cx('container-1', 'row', 'no-gutters')}>
                 <div className={cx('image-div', 'col', 'l-3', 'l-o-1')}>
-                    <img
-                        className={cx('img')}
-                        src="https://baselondon.com/cdn/shop/products/woburn_20bordo_320x.jpg?v=1680261317"
-                        alt="popular-img"
-                    />
+                    <img className={cx('img')} src={image} alt="popular-img" />
                 </div>
                 <div className={cx('des-div', 'col', 'l-4', 'l-o-2')}>
                     <div className={cx('sticky')}>
@@ -40,20 +39,12 @@ function Popular() {
                     </p>
                 </div>
                 <div className={cx('image-div', 'col', 'l-3', 'l-o-1')}>
-                    <img
-                        className={cx('img')}
-                        src="https://baselondon.com/cdn/shop/products/Sully_20Washed_20Tan_20Lifestyle_203_320x.jpg?v=1683293719"
-                        alt="popular-img"
-                    />
+                    <img className={cx('img')} src={image2} alt="popular-img" />
                 </div>
             </div>
             <div className={cx('container-1', 'row', 'no-gutters')}>
                 <div className={cx('image-div', 'col', 'l-3', 'l-o-1')}>
-                    <img
-                        className={cx('img')}
-                        src="https://baselondon.com/cdn/shop/products/Crane-Black-1_320x.jpg?v=1683211567"
-                        alt="popular-img"
-                    />
+                    <img className={cx('img')} src={image3} alt="popular-img" />
                 </div>
                 <div className={cx('des-div', 'col', 'l-4', 'l-o-2')}>
                     <div className={cx('sticky')}>

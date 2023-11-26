@@ -15,7 +15,7 @@ function Brogues() {
     useEffect(() => {
         getAllProducts(dispatch);
     }, []);
-    const brogues = allProducts?.filter((product) => product.type.includes('brogues'));
+    const brogues = allProducts?.filter((product) => product.type.includes('brogue'));
     // Uppercase first letter of word
     function capitalizeString(str) {
         return str.replace(/\b\w/g, function (l) {
