@@ -67,16 +67,154 @@ function Header() {
             getWish(userId, dispatch);
         }
     }, [wishlist]);
+    const [open, setOpen] = useState(false);
+    const [open1, setOpen1] = useState(false);
+    const [open2, setOpen2] = useState(false);
+    const handleOpen = () => {
+        setOpen(!open);
+        setOpen1(false);
+        setOpen2(false);
+    };
+    const handleOpen1 = () => {
+        setOpen(!open);
+        setOpen1(false);
+        setOpen2(false);
+    };
+    const handleOpen2 = () => {
+        setOpen(false);
+        setOpen1(!open1);
+        setOpen2(false);
+    };
+    const handleOpen3 = () => {
+        setOpen(false);
+        setOpen1(false);
+        setOpen2(!open2);
+    };
     return (
         <div>
             <div className={cx('wrapper', 'grid')}>
                 <div className={cx('row', 'no-gutters', 'container')}>
-                    <div className={cx('logo', 'col', 'l-3')}>
-                        <Link style={{ textDecoration: 'none', color: 'inherit' }} to={'/'}>
+                    <div className={cx('logo')}>
+                        <Link className={cx('logoTitle')} style={{ textDecoration: 'none', color: 'inherit' }} to={'/'}>
                             Men's Era
                         </Link>
                     </div>
-                    <div className={cx('navigation', 'col', 'l-5')}>
+                    <div className={cx('burger')}>
+                        <label htmlFor="burgerCheckbox" className={cx('lines')}>
+                            <div className={cx('line')}></div>
+                            <div className={cx('line')}></div>
+                            <div className={cx('line')}></div>
+                        </label>
+                        <input type="checkbox" id="burgerCheckbox" className={cx('burgerCheckbox')} />
+                        <div className={cx('burgerMenu')}>
+                            <div className={cx('burgerContainer')}>
+                                <span onClick={handleOpen1}>Shoes</span>
+                                {open && !open1 && !open2 && (
+                                    <ul className={cx('burgerShoesList')}>
+                                        <li className={cx('burgerShoesItem')}>
+                                            <Link style={{ textDecoration: 'none', color: 'inherit' }} to="/all-shoes">
+                                                All Shoes
+                                            </Link>
+                                        </li>
+                                        <li className={cx('burgerShoesItem')}>
+                                            <Link style={{ textDecoration: 'none', color: 'inherit' }} to="/brogues">
+                                                Brogues
+                                            </Link>
+                                        </li>
+                                        <li className={cx('burgerShoesItem')}>
+                                            <Link
+                                                style={{ textDecoration: 'none', color: 'inherit' }}
+                                                to="/casual-shoes"
+                                            >
+                                                Casual Shoes
+                                            </Link>
+                                        </li>
+                                        <li className={cx('burgerShoesItem')}>
+                                            <Link
+                                                style={{ textDecoration: 'none', color: 'inherit' }}
+                                                to="/formal-shoes"
+                                            >
+                                                Formal Shoes
+                                            </Link>
+                                        </li>
+                                        <li className={cx('burgerShoesItem')}>
+                                            <Link style={{ textDecoration: 'none', color: 'inherit' }} to="/work-shoes">
+                                                Work Shoes
+                                            </Link>
+                                        </li>
+                                        <li className={cx('burgerShoesItem')}>
+                                            <Link style={{ textDecoration: 'none', color: 'inherit' }} to="/loafers">
+                                                Loafers
+                                            </Link>
+                                        </li>
+                                    </ul>
+                                )}
+                            </div>
+                            <div className={cx('burgerContainer')}>
+                                <span onClick={handleOpen2}>Boots</span>
+                                {open1 && !open && !open2 && (
+                                    <ul className={cx('burgerShoesList')}>
+                                        <li className={cx('burgerShoesItem')}>
+                                            <Link style={{ textDecoration: 'none', color: 'inherit' }} to="/all-boots">
+                                                All Boots
+                                            </Link>
+                                        </li>
+                                        <li className={cx('burgerShoesItem')}>
+                                            <Link style={{ textDecoration: 'none', color: 'inherit' }} to="/chukka">
+                                                Chukka
+                                            </Link>
+                                        </li>
+                                        <li className={cx('burgerShoesItem')}>
+                                            <Link style={{ textDecoration: 'none', color: 'inherit' }} to="/chelsea">
+                                                Chelsea
+                                            </Link>
+                                        </li>
+                                        <li className={cx('burgerShoesItem')}>
+                                            <Link
+                                                style={{ textDecoration: 'none', color: 'inherit' }}
+                                                to="/smart-boots"
+                                            >
+                                                Smart Boots
+                                            </Link>
+                                        </li>
+                                        <li className={cx('burgerShoesItem')}>
+                                            <Link style={{ textDecoration: 'none', color: 'inherit' }} to="/biker">
+                                                Biker
+                                            </Link>
+                                        </li>
+                                    </ul>
+                                )}
+                            </div>
+                            <div className={cx('burgerContainer')}>
+                                <span onClick={handleOpen3}>Collections</span>
+                                {open2 && !open && !open1 && (
+                                    <ul className={cx('burgerShoesList')}>
+                                        <li className={cx('burgerShoesItem')}>
+                                            <Link style={{ textDecoration: 'none', color: 'inherit' }} to="/pub">
+                                                Pub Classics
+                                            </Link>
+                                        </li>
+                                        <li className={cx('burgerShoesItem')}>
+                                            <Link style={{ textDecoration: 'none', color: 'inherit' }} to="/suede">
+                                                Suede Styles
+                                            </Link>
+                                        </li>
+                                        <li className={cx('burgerShoesItem')}>
+                                            <Link style={{ textDecoration: 'none', color: 'inherit' }} to="/all-shoes">
+                                                All Footwear
+                                            </Link>
+                                        </li>
+                                        <li className={cx('burgerShoesItem')}>
+                                            <Link style={{ textDecoration: 'none', color: 'inherit' }} to="/wedding">
+                                                Wedding Shoes
+                                            </Link>
+                                        </li>
+                                    </ul>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                    <div className={cx('navigation')}>
                         <ul className={cx('nav-list')}>
                             <li onMouseOut={noHover} onMouseOver={handleHover} className={cx('nav-list-item', 'shoes')}>
                                 Shoes
@@ -86,19 +224,19 @@ function Header() {
                                 onMouseOver={handleHover1}
                                 className={cx('nav-list-item', 'boost')}
                             >
-                                Boost
+                                Boots
                             </li>
                             <li
                                 onMouseOut={noHover2}
                                 onMouseOver={handleHover2}
                                 className={cx('nav-list-item', 'collection')}
                             >
-                                Collection
+                                Collections
                                 {/* <div className={cx('collection-menu')}>This is menu</div> */}
                             </li>
                         </ul>
                     </div>
-                    <div className={cx('auth', 'col', 'l-4')}>
+                    <div className={cx('auth')}>
                         <label htmlFor="checkbox">
                             <FontAwesomeIcon className={cx('icon')} icon={faUserTie} />
                         </label>
@@ -160,6 +298,7 @@ function Header() {
                     </div>
                 </div>
             </div>
+
             {/* Popper notify */}
             {/* Shoes */}
             <div

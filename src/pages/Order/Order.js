@@ -53,6 +53,15 @@ function Order() {
         phone: infoDetail && infoDetail.phone ? infoDetail.phone : '',
     });
     useEffect(() => {
+        setValues({
+            email: infoDetail.email,
+            firstname: infoDetail.firstname,
+            lastname: infoDetail.lastname,
+            address: infoDetail.address,
+            phone: infoDetail.phone,
+        });
+    }, [infoDetail]);
+    useEffect(() => {
         const isValid =
             values.email !== '' &&
             /\S+@\S+\.\S+/.test(values.email) &&
@@ -183,7 +192,7 @@ function Order() {
                                     <label className={cx('shipping-address-input-label')}>Phone</label>
                                     <input
                                         onChange={handleChange}
-                                        value={values?.phone.toLocaleString()}
+                                        value={values?.phone?.toLocaleString()}
                                         name="phone"
                                         className={cx('shipping-address-input')}
                                         placeholder="Phone number"

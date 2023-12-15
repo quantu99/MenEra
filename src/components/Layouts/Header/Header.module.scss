@@ -1,3 +1,4 @@
+@import '../../GlobalStyles//GlobalStyles.module.scss';
 .wrapper {
     position: fixed;
     top: 0px;
@@ -18,8 +19,84 @@
     font-family: 'Italiana', sans-serif;
     color: var(--tan-color);
     font-size: 40px;
+    flex: 1;
+    @include mobile {
+        text-align: center;
+    }
+}
+
+.logoTitle {
+    @include mobile {
+        font-size: 35px;
+    }
+}
+.burger {
+    display: none;
+    @include mobile {
+        display: block;
+        position: absolute;
+    }
+}
+.lines {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+.line {
+    width: 20px;
+    height: 2px;
+    border-radius: 50px;
+    background-color: var(--gold-color);
+}
+.burgerCheckbox {
+    display: none;
+}
+.burgerCheckbox:checked ~ .burgerMenu {
+    display: flex;
+}
+.burgerMenu {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 46px;
+    background-color: white;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.burgerContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    span {
+        font-size: 30px;
+        font-weight: 400;
+        color: var(--tan-color);
+    }
+}
+.burgerShoesList {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    li {
+        padding-left: 5px;
+        font-weight: 300;
+        color: var(---charcoal-color);
+        border-left: 2px solid var(--gold-color);
+    }
 }
 .navigation {
+    flex: 1;
+    @include mobile {
+        display: none;
+    }
 }
 .nav-list {
     display: flex;
@@ -197,6 +274,10 @@
     position: relative;
     display: flex !important;
     justify-content: flex-end;
+    flex: 1;
+    @include mobile {
+        display: none !important;
+    }
 }
 .icon {
     font-size: 1.6rem;

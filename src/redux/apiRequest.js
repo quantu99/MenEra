@@ -31,7 +31,14 @@ import {
     getMyOrderHistoryFailed,
     getMyOrderHistorySuccess,
 } from './authSlice';
-import { getAllUsersFailed, getAllUsersStart, getAllUsersSuccess } from './userSlice';
+import {
+    getAllUsersFailed,
+    getAllUsersStart,
+    getAllUsersSuccess,
+    getUserDetailStart,
+    getUserDetailFailed,
+    getUserDetailSuccess,
+} from './userSlice';
 import {
     cartFailed,
     cartStart,
@@ -110,6 +117,15 @@ export const logoutUsers = async (accessToken, id, dispatch, navigate, axiosJWT)
         navigate('/login');
     } catch (err) {
         dispatch(logoutFailed());
+    }
+};
+export const getUserDetail = async (dispatch, id) => {
+    dispatch(getUserDetailStart());
+    try {
+        const res = await axios.get('https://emc-api.onrender.com/v1/user/' + id);
+        dispatch(getUserDetailSuccess(res.data));
+    } catch (err) {
+        dispatch(getUserDetailFailed());
     }
 };
 export const editUsers = async (accessToken, id, newPassword, dispatch, axiosJWT) => {

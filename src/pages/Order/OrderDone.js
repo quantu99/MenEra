@@ -25,6 +25,10 @@ function OrderDone() {
     const email = infoDetail?.email;
     const address = infoDetail?.address;
     useEffect(() => {
+        const email = infoDetail?.email;
+        const address = infoDetail?.address;
+    }, [infoDetail]);
+    useEffect(() => {
         const userId = id;
         getCart(userId, dispatch);
     }, []);

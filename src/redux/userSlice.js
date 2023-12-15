@@ -7,6 +7,11 @@ const userSlice = createSlice({
             isFetching: false,
             error: false,
         },
+        getUserDetail: {
+            userDetail: null,
+            isFetching: false,
+            error: false,
+        },
     },
     reducers: {
         getAllUsersStart: (state) => {
@@ -20,7 +25,25 @@ const userSlice = createSlice({
             state.getAllUsers.isFetching = false;
             state.getAllUsers.error = true;
         },
+        getUserDetailStart: (state) => {
+            state.getUserDetail.isFetching = true;
+        },
+        getUserDetailSuccess: (state, action) => {
+            state.getUserDetail.isFetching = false;
+            state.getUserDetail.userDetail = action.payload;
+        },
+        getUserDetailFailed: (state) => {
+            state.getUserDetail.isFetching = false;
+            state.getUserDetail.error = true;
+        },
     },
 });
-export const { getAllUsersStart, getAllUsersSuccess, getAllUsersFailed } = userSlice.actions;
+export const {
+    getAllUsersStart,
+    getAllUsersSuccess,
+    getAllUsersFailed,
+    getUserDetailStart,
+    getUserDetailSuccess,
+    getUserDetailFailed,
+} = userSlice.actions;
 export default userSlice.reducer;
