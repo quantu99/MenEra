@@ -22,11 +22,12 @@ function OrderDone() {
     useEffect(() => {
         getInfoDetail(id, dispatch);
     }, []);
-    const email = infoDetail?.email;
-    const address = infoDetail?.address;
+    const [email, setEmail] = useState(infoDetail?.email);
+    const [address, setAddress] = useState(infoDetail?.address);
+
     useEffect(() => {
-        const email = infoDetail?.email;
-        const address = infoDetail?.address;
+        setEmail(infoDetail?.email);
+        setAddress(infoDetail?.address);
     }, [infoDetail]);
     useEffect(() => {
         const userId = id;

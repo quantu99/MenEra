@@ -54,11 +54,11 @@ function Order() {
     });
     useEffect(() => {
         setValues({
-            email: infoDetail.email,
-            firstname: infoDetail.firstname,
-            lastname: infoDetail.lastname,
-            address: infoDetail.address,
-            phone: infoDetail.phone,
+            email: infoDetail?.email,
+            firstname: infoDetail?.firstname,
+            lastname: infoDetail?.lastname,
+            address: infoDetail?.address,
+            phone: infoDetail?.phone,
         });
     }, [infoDetail]);
     useEffect(() => {
