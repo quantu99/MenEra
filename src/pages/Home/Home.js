@@ -16,12 +16,12 @@ function Home() {
             <Header />
             <Thumbnail />
             <Popular />
-            {/* <WatchThumbnail /> */}
-            {/* <Trending /> */}
-            {/* <CollectionThumbnail /> */}
-            {/* <Collection /> */}
-            {/* <Kind /> */}
-            {/* <Footer /> */}
+            <WatchThumbnail />
+            <Trending />
+            <CollectionThumbnail />
+            <Collection />
+            <Kind />
+            <Footer />
         </div>
     );
 }
